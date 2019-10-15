@@ -1,0 +1,108 @@
+//code for using distance sensor taken from www.HowToMechatronics.com
+
+#include <Servo.h>
+
+float t = 0;
+
+long duration;
+int distance;
+
+const int led = 3;
+const int eyebrowServoRight = 9;
+const int eyebrowServoLeft = 10;
+//const int mouthServo = 10; //removed all code related to opening and closing a mouth because physical limitations made it not possible to do this
+const int trigPin = 5;
+const int echoPin = 6;
+const int speaker = 4;
+
+Servo eye1;
+Servo eye2;
+Servo mouth;
+
+float comfortable = 80; //value of distance at which the face is completely relaxed. below this, eyebrows will begin to move
+float rude = 10; //value at which mouth will open and sound will come out of the speaker
+
+float calm = 0; //value of the eyebrow servo for the eye to look relaxed
+float calmLeft = 65;
+float angry = 80; //value for it to look angry
+float angryLeft = 0;
+
+float closed = 0; //the value of the mouth servo for the mouth to be shut
+float opened = 120; //the value for it to be open
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(led, OUTPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(speaker, 11);
+  eye1.attach(eyebrowServoRight);
+  eye2.attach(eyebrowServoLeft);
+  //mouth.attach(mouthServo);
+}
+
+void loop() {
+
+  //Start of distance measuring code
+  // Clears the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  distance = duration * 0.034 / 2;
+  // Prints the distance on the Serial Monitor
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  //End of distance measuring code
+
+  if (distance >= comfortable) { //eyebrows relaxed, mouth closed, no red eyes
+    //mouth.write(closed);
+    noTone(speaker);
+    eye1.write(calm);
+    eye2.write(calmLeft);
+    digitalWrite(led, LOW);
+  }
+
+  if ((distance < comfortable) && (distance > rude)) { //mouth closed, eyebrows get angrier and LED's get brighter the closer you are
+    //mouth.write(closed);
+    noTone(speaker);
+
+    float eyeTilt = map(distance, 10, comfortable, angry, calm);
+
+    //set up a timer to let the servo move comfortably without having to use delay function
+    
+    float threshold = 10;
+    t++;
+    if (t >= threshold) {
+      
+      eye1.write(eyeTilt);
+      eyeTilt = map(eyeTilt, calm, angry, calmLeft, angryLeft );
+      eye2.write(eyeTilt);
+      t = 0;
+    }
+
+    float brightness = map(distance, 10, comfortable, 255, 1);
+    analogWrite(led, brightness);
+
+//    Serial.print("t = "); //debug lines
+//    Serial.println(t);
+  }
+
+  if (distance <= rude) { //mouth opens and makes noise, eyebrows stay frowned, led stays on
+    //mouth.write(opened); 
+    tone(speaker, 35);
+    tone(speaker, 40);
+    
+    eye1.write(angry);
+    eye2.write(angryLeft);
+
+    digitalWrite(led, HIGH);
+  }
+}
