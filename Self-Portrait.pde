@@ -60,7 +60,7 @@ void draw() {
     beard[n].exist();
   }
   t++;
-  if (t >= 12) {
+  if (t >= 20) {
     t = 0;
   }
 }
