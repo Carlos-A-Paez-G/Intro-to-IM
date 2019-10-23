@@ -65,6 +65,21 @@ void draw() {
   }
 }
 
+//this draws the beard hairs
+class beardHair {
+  float x = random(0, width);
+  float y = random(200, height);
+  
+
+  void exist() {
+    strokeWeight(t);
+    stroke(0);
+    line(x, y, x+random(-5, 5), y+10); 
+    
+  }
+}
+
+
 //code used to find coordinates
 void mouseClicked() {
   translate(width/2, 200);
