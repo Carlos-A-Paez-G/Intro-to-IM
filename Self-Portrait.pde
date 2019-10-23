@@ -54,7 +54,7 @@ void draw() {
   curve(5-width/2, 293-200, -50, 30, 50, 30, 50, 30);
   popMatrix();
 
-  //beard
+  //beard - it grows and then gets shaven, which is what I always do with it instead of keeping it at a constant length
   for (int n = 0; n < 100; n++) {
     beard[n] = new beardHair();
     beard[n].exist();
