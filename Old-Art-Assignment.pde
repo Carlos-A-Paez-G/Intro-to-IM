@@ -11,5 +11,4 @@ while (start > end) {
   end = int(random(pies.length));
 }
 arc(50, 50, 50, 50, pies[start], pies[end]);
-strokeWeight(5);
-point(0, 0);
+
