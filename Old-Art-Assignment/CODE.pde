@@ -59,10 +59,11 @@ void setup() {
   rect(0, 0, pos, pos);
 }
 
+void draw(){
+}
+
 void drawLines() { //draws lines inside square in a random order
-
   while (t > 0) {
-
     int d = int(random(1, 9));
     println(d);
     if (d == 1 && l1 == 0) {
