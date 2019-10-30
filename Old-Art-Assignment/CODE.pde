@@ -1,6 +1,6 @@
 int pos = 29; //size of the squares
-int layer = 17; 
-int t = layer/2;
+int layer = 17; //keeps track of how many squares to draw
+int t = layer/2; //keeps track of how many lines to draw inside the squares
 
 int l1 = 0;
 int l2 = 0;
