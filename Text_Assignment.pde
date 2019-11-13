@@ -4,9 +4,9 @@
 
 PFont f;
 float size = 32;
-String nouns[] = {"PERSON", "PANCAKE", "BALLOON", "CROCODILE", "CLOUD", "CARBOHYDRATE", "MILK", "INSTITUTION", "PARTY", "SQUID", "BIT", "WATER", "PAINTER"};
-String verbs[] = {"RECOGNIZES", "DREAMS", "SQUEEZES", "DISAGREES", "CURES", "PROTECTS", "ARRESTS", "LAUNCHES", "FLOWS", "DANCES", "GLOWS", "FUSES", "INHALES"};
-String adjectives[] = {"BIG", "CALM", "HOT", "WAVY", "SMOOTH", "STUPID", "COMPLICATED", "CLOSED MINDED", "FLAT", "LIVELY", "ADVENTUROUS", "COLORFUL", "LOADED"};
+String nouns[] = {"PERSON", "PANCAKE", "BALLOON", "CROCODILE", "CLOUD", "CARBOHYDRATE", "MILK", "INSTITUTION", "PARTY", "SQUID", "BIT", "WATER", "PAINTER", "DAUGHTER", "FRANKNESS", "LABURNUM", "ABROAD"};
+String verbs[] = {"RECOGNIZES", "DREAMS", "SQUEEZES", "DISAGREES", "CURES", "PROTECTS", "ARRESTS", "LAUNCHES", "FLOWS", "DANCES", "GLOWS", "FUSES", "INHALE", "HALT"};
+String adjectives[] = {"BIG", "CALM", "HOT", "WAVY", "SMOOTH", "STUPID", "COMPLICATED", "CLOSED MINDED", "FLAT", "LIVELY", "ADVENTUROUS", "COLORFUL", "LOADED", "CLEG-TORMENTED", "HAINOUS"};
 String adverbs[] = {"HUNGRILY", "GLEEFULLY", "STEALTHILY", "ROUGHLY", "SEDUCTIVELY", "ODDLY", "TOMORROW", "VERY SOON", "LAZILY", "LITERALLY", "LIKE PLASTIC", "RESENTFULLY"};
 
 int wordAmount = 10;
@@ -25,20 +25,20 @@ void setup() {
 
 
   //initialize arrays of Words class
-  for (int i = 0; i < Nouns.length; i++) {
-    Adjectives[i] = new Word(new PVector(100, 100*i), adjectives[int(random(0, nouns.length-1))], radians(random(10, 50)));
+  for (int i = 0; i < Adjectives.length; i++) {
+    Adjectives[i] = new Word(new PVector(100, 100*i), adjectives[int(random(0, adjectives.length-1))], radians(random(10, 50)));
   }
 
   for (int i = 0; i < Nouns.length; i++) {
     Nouns[i] = new Word(new PVector(200, 100*(i+1)), nouns[int(random(0, nouns.length-1))], radians(random(10, 50)));
   }
 
-  for (int i = 0; i < Nouns.length; i++) {
-    Verbs[i] = new Word(new PVector(300, 100*(i+1)), verbs[int(random(0, nouns.length-1))], radians(random(10, 50)));
+  for (int i = 0; i < Verbs.length; i++) {
+    Verbs[i] = new Word(new PVector(300, 100*(i+1)), verbs[int(random(0, verbs.length-1))], radians(random(10, 50)));
   }
 
-  for (int i = 0; i < Nouns.length; i++) {
-    Adverbs[i] = new Word(new PVector(400, 100*(i+1)), adverbs[int(random(0, nouns.length-1))], radians(random(10, 50)));
+  for (int i = 0; i < Adverbs.length; i++) {
+    Adverbs[i] = new Word(new PVector(400, 100*(i+1)), adverbs[int(random(0, adverbs.length-1))], radians(random(10, 50)));
   }
 }
 
