@@ -38,7 +38,7 @@ void setup() {
   for (int i = 0; i < c.length; i++) {
     c[i] = 0;
   }
-  
+
   //initializes input port
   println(Serial.list());
   String portName = Serial.list()[0];
@@ -62,7 +62,7 @@ void draw() {
   }
 
   chooseColors();
- // chooseColorsDebug();
+  // chooseColorsDebug();
 
   if (execute) {
     background(200);
@@ -201,39 +201,32 @@ void processReset() {
   }
 }
 
-void serialEvent(){
-       buttonInput = receiver.readStringUntil('\n'); 
-
-   if(buttonInput != null){
-    buttonInput = trim(buttonInput); 
-   }
-}
-
 //This will read which button has been pressed on the Arduino, and make it so that the sketch is colored accordingly afterwards
 void chooseColors() {
-  println(buttonInput);
-    if (buttonInput == "RED" && !red) {
+  buttonInput = receiver.readStringUntil('\n'); 
+  if (buttonInput != null) {
+    buttonInput = trim(buttonInput);
+    if (buttonInput.equals("RED") && !red) {
       c[chooseCount] = color(255, 0, 0);
       red = true;
       chooseCount++;
-      println("HI");
     }
-    if (buttonInput == "BLUE" && !blue) {
+    if (buttonInput.equals("BLUE") && !blue) {
       c[chooseCount] = color(0, 0, 255);
       blue = true;
       chooseCount++;
     }
-    if (buttonInput == "GREEN" && !green) {
+    if (buttonInput.equals("GREEN") && !green) {
       c[chooseCount] = color(0, 255, 0);
       green = true;
       chooseCount++;
-
     }
-    if (buttonInput == "YELLOW" && !yellow) {
+    if (buttonInput.equals("YELLOW") && !yellow) {
       c[chooseCount] = color(250, 246, 27);
       yellow = true;
       chooseCount++;
     }
+  }
   drawChosen();
 }
 
