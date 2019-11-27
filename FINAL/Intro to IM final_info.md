@@ -8,7 +8,7 @@ Side view of what the final project would look like and bird's eye view. This mi
 
 The game would be played on a glass table and the board should be of transparent acrylic.
 
-![alt text](ROUGH SKETCH FINAL_IM.jpg)
+![](ROUGH SKETCH FINAL_IM.jpg)
 
 
 **CIRCUIT SCHEMATIC**
