@@ -7,12 +7,18 @@ int blue = 0;
 int red = 1;
 
 Defender Defender_B = new Defender(blue, 1);
+FightBall FightBall_B = new FightBall(blue, 2);
+FlowerLady FlowerLady_B = new FlowerLady(blue, 3);
+Swampy Swampy_R = new Swampy(red, 4);
+Onion Onion_R = new Onion(red, 5);
+StickRobo StickRobo_R = new StickRobo(red, 6);
 
 //Fonts
 PFont title;
 PFont names;
 PFont descriptions;
 PFont plain;
+PFont specialExtra;
 
 int[][] cells = new int[][]{
   new int[] {1, 2, 3, 4}, 
@@ -49,6 +55,7 @@ int SELECT_showText = 1;
 void setup() {
   size(800, 800);
   imageMode(CENTER);
+  rectMode(CORNER);
   noStroke();
   bckgrnd = loadImage("background.jpg");
   charaPictures[0] = loadImage("DefenderN_B.png");
@@ -71,6 +78,8 @@ void setup() {
   title = createFont("Sitka Banner Bold Italic", 64);
   plain = createFont("Sitka Banner", 28);
   names = createFont("Sitka Banner Bold", 44);
+  descriptions = createFont("Sitka Banner Italic", 28);
+  specialExtra = createFont("Sitka Banner Bold", 28);
 
 
   //debug - finding fonts
@@ -148,17 +157,23 @@ void draw() {
         fill(0);
         text("PUSH BUTTON TO START", width/2, height/2);
       }
-            SELECT_tText++;
-      if(SELECT_tText == 100){
-       SELECT_showText *= -1;
-       SELECT_tText = 0;
+      SELECT_tText++;
+      if (SELECT_tText == 100) {
+        SELECT_showText *= -1;
+        SELECT_tText = 0;
       }
     }
   }
+  
   //*********USE TO TEST THINGS************
-  if(gameState == TESTING){
-    Defender_B.MenuDisplay();
-    
+  if (gameState == TESTING) {
+    Onion_R.MenuDisplay();
+    Defender_B.hpDisplay();
+    FightBall_B.hpDisplay();
+    FlowerLady_B.hpDisplay();
+    Swampy_R.hpDisplay();
+    Onion_R.hpDisplay();
+    StickRobo_R.hpDisplay();
   }
 }
 
@@ -481,26 +496,15 @@ void R_Choice() {
 }
 
 //**CHARACTER CLASSES**
-//class Chara {
-//  int hp;
-//  int atk = 1;
-//  int move = 1;
-//  int team;
-//  int id;
 
-//  Chara(int Team, int ID) {
-//    team = Team;
-//    id = ID;
-//  }
+float hpDisplaypos = 120;
+float menuDisplaypos_x = 250;
+float menuDisplaypos_y = 100;
+float menuDisplaypos_txt = 350;
 
-//  if (id == 0) {
-//    hp = 5;
-//    atk = 1;
-//    move = 1;
-//  }
-//}
 class Defender {
   int hp = 5;
+  int hp_max = 5;
   int atk = 1;
   int move = 1;
   int team;
@@ -519,80 +523,356 @@ class Defender {
     if (team == red) {
       fill(255, 0, 0);
     }
-    text("Defender", 200, 100);
+    text("Ricardo", 200, 100);
     pushMatrix();
-    translate(300, height/2);
+    translate(menuDisplaypos_x, height/2);
     showDefender(team);
     popMatrix();
     textFont(plain);
     fill(0);
-    text("HP: " + hp, width-150, 150);
-    text("ATTACK: " + atk, width-150, 200);
-    text("MOVE: " + hp, width-150, 250);
-    text("SPECIAL: Shield", width-150, 300);
+    textAlign(LEFT);
+    text("HP: " + hp, width-menuDisplaypos_txt, 150);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
+    text("MOVE: " + hp, width-menuDisplaypos_txt, 250);
+    textFont(specialExtra);
+    text("SPECIAL: Protection", width-menuDisplaypos_txt, 300);
+    text("EXTRA: Shield Throw", width-menuDisplaypos_txt, 400);
+    textFont(descriptions);
+    text("Protects adjacent allies (-1 damage)", width-(menuDisplaypos_txt), 300, 300, 100);
+    text("Throws shield for 2 damage. Cannot use Protection anymore.", width-(menuDisplaypos_txt), 400, 300, 200);
   }
-  
-  void hpDisplay(){
-   pushMatrix();
-    translate(150, height-100);
+
+  void hpDisplay() {
+    float xpos = -50;
+    pushMatrix();
+    translate(hpDisplaypos*position, height-130);
     scale(0.2);
-    showFlowerLady(blue);
-    popMatrix(); 
+    showDefender(team);
+    scale(1.8);
+    for (int i = 0; i < hp_max; i++) {
+      stroke(255, 0, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    xpos = -50;
+    for (int i = 0; i < hp; i++) {
+      stroke(0, 255, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    popMatrix();
   }
 }
 
 class Swampy {
   int hp = 2;
+  int hp_max = 2;
   int atk = 3;
   int move = 2;
   int team;
+  int position;
 
-  Swampy(int Team) {
+  Swampy(int Team, int Pos) {
     team = Team;
+    position = Pos;
+  }
+
+  void MenuDisplay() {
+    textFont(names);
+    if (team == blue) {
+      fill(0, 0, 255);
+    }
+    if (team == red) {
+      fill(255, 0, 0);
+    }
+    text("María", 200, 100);
+    pushMatrix();
+    translate(200, height/2);
+    scale(0.5);
+    showSwampy(team);
+    popMatrix();
+    textFont(plain);
+    fill(0);
+    textAlign(LEFT);
+    text("HP: " + hp, width-menuDisplaypos_txt, 150);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
+    text("MOVE: " + hp, width-menuDisplaypos_txt, 250);
+    textFont(specialExtra);
+    text("SPECIAL: Tail Slam", width-menuDisplaypos_txt, 300);
+    text("EXTRA: Tail Flail", width-menuDisplaypos_txt, 400);
+    textFont(descriptions);
+    text("Does 3 damage. Adjacent foes take 1 damage.", width-(menuDisplaypos_txt), 300, 300, 100);
+    text("Does 2 damage to all adjacent foes. Take 1 damage", width-(menuDisplaypos_txt), 400, 300, 200);
+  }
+
+  void hpDisplay() {
+    float xpos = -50;
+    pushMatrix();
+    translate(hpDisplaypos*position, height-130);
+    scale(0.2);
+    showSwampy(team);
+    scale(1.8);
+    for (int i = 0; i < hp_max; i++) {
+      stroke(255, 0, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    xpos = -50;
+    for (int i = 0; i < hp; i++) {
+      stroke(0, 255, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    popMatrix();
   }
 }
 
 class StickRobo {
   int hp = 1;
+  int hp_max = 1;
   int atk = 2; //range is 2
   int move = 3;
   int team;
+  int position;
 
-  StickRobo(int Team) {
+  StickRobo(int Team, int Pos) {
     team = Team;
+    position = Pos;
+  }
+  void MenuDisplay() {
+    textFont(names);
+    if (team == blue) {
+      fill(0, 0, 255);
+    }
+    if (team == red) {
+      fill(255, 0, 0);
+    }
+    text("L1uv14", 200, 100);
+    pushMatrix();
+    translate(200, height/2);
+    scale(0.7);
+    showStickRobo(team);
+    popMatrix();
+    textFont(plain);
+    fill(0);
+    textAlign(LEFT);
+    text("HP: " + hp, width-menuDisplaypos_txt, 150);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
+    text("MOVE: " + hp, width-menuDisplaypos_txt, 250);
+    textFont(specialExtra);
+    text("SPECIAL: Hug", width-menuDisplaypos_txt, 300);
+    text("EXTRA: Teleport", width-menuDisplaypos_txt, 400);
+    textFont(descriptions);
+    text("Deal 4 damage to 1 adjacent foe.", width-(menuDisplaypos_txt), 300, 300, 100);
+    text("Move anywhere on the board.", width-(menuDisplaypos_txt), 400, 300, 200);
+  }
+
+  void hpDisplay() {
+    float xpos = -50;
+    pushMatrix();
+    translate(hpDisplaypos*position, height-130);
+    scale(0.2);
+    showStickRobo(team);
+    scale(1.8);
+    for (int i = 0; i < hp_max; i++) {
+      stroke(255, 0, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    xpos = -50;
+    for (int i = 0; i < hp; i++) {
+      stroke(0, 255, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    popMatrix();
   }
 }
 
 class FightBall {
   int hp = 4;
+  int hp_max = 4;
   int atk = 2;
   int move = 2;
   int team;
+  int position;
 
-  FightBall(int Team) {
+  FightBall(int Team, int Pos) {
     team = Team;
+    position = Pos;
+  }
+  void MenuDisplay() {
+    textFont(names);
+    if (team == blue) {
+      fill(0, 0, 255);
+    }
+    if (team == red) {
+      fill(255, 0, 0);
+    }
+    text("Norm", 200, 100);
+    pushMatrix();
+    translate(200, height/2);
+    scale(0.9);
+    showFightBall(team);
+    popMatrix();
+    textFont(plain);
+    fill(0);
+    textAlign(LEFT);
+    text("HP: " + hp, width-menuDisplaypos_txt, 150);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
+    text("MOVE: " + hp, width-menuDisplaypos_txt, 250);
+    textFont(specialExtra);
+    text("SPECIAL: N/A", width-menuDisplaypos_txt, 300);
+    text("EXTRA: Sacrifice", width-menuDisplaypos_txt, 400);
+    textFont(descriptions);
+    //text("Protects adjacent allies (-1 damage)", width-(menuDisplaypos_txt), 300, 300, 100);
+    text("Give remaining HP to adjacent ally. This character dies.", width-(menuDisplaypos_txt), 400, 300, 200);
+  }
+
+  void hpDisplay() {
+    float xpos = -50;
+    pushMatrix();
+    translate(hpDisplaypos*position, height-130);
+    scale(0.2);
+    showFightBall(team);
+    scale(1.8);
+    for (int i = 0; i < hp_max; i++) {
+      stroke(255, 0, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    xpos = -50;
+    for (int i = 0; i < hp; i++) {
+      stroke(0, 255, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    popMatrix();
   }
 }
 
 class FlowerLady {
   int hp = 5;
+  int hp_max = 5;
   int atk = 0;
   int move = 1;
   int team;
+  int position;
 
-  FlowerLady(int Team) {
+
+  FlowerLady(int Team, int Pos) {
     team = Team;
+    position = Pos;
+  }
+  void MenuDisplay() {
+    textFont(names);
+    if (team == blue) {
+      fill(0, 0, 255);
+    }
+    if (team == red) {
+      fill(255, 0, 0);
+    }
+    text("Petuña", 200, 100);
+    pushMatrix();
+    translate(200, height/2.2);
+    scale(0.85);
+    showFlowerLady(team);
+    popMatrix();
+    textFont(plain);
+    fill(0);
+    textAlign(LEFT);
+    text("HP: " + hp, width-menuDisplaypos_txt, 150);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
+    text("MOVE: " + hp, width-menuDisplaypos_txt, 250);
+    textFont(specialExtra);
+    text("SPECIAL: Perfume", width-menuDisplaypos_txt, 300);
+    text("EXTRA: Stench", width-menuDisplaypos_txt, 400);
+    textFont(descriptions);
+    text("Increase ally's next attack by 2.", width-(menuDisplaypos_txt), 300, 300, 100);
+    text("Reduce foe's next attack by 3.", width-(menuDisplaypos_txt), 400, 300, 200);
+  }
+
+  void hpDisplay() {
+    float xpos = -50;
+    pushMatrix();
+    translate(hpDisplaypos*position, height-130);
+    scale(0.2);
+    showFlowerLady(team);
+    scale(1.8);
+    for (int i = 0; i < hp_max; i++) {
+      stroke(255, 0, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    xpos = -50;
+    for (int i = 0; i < hp; i++) {
+      stroke(0, 255, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    popMatrix();
   }
 }
 
 class Onion {
-  int hp = 5;
-  int atk = 0;
-  int move = 1;
+  int hp = 3;
+  int hp_max = 3;
+  int atk = 1;
+  int move = 0;
   int team;
+  int position;
 
-  Onion(int Team) {
+
+  Onion(int Team, int Pos) {
     team = Team;
+    position = Pos;
+  }
+  void MenuDisplay() {
+    textFont(names);
+    if (team == blue) {
+      fill(0, 0, 255);
+    }
+    if (team == red) {
+      fill(255, 0, 0);
+    }
+    text("El Cebollón", 175, 100);
+    pushMatrix();
+    translate(200, height/2.2);
+    showOnion(team);
+    popMatrix();
+    textFont(plain);
+    fill(0);
+    textAlign(LEFT);
+    text("HP: " + hp, width-menuDisplaypos_txt, 150);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
+    text("MOVE: " + hp, width-menuDisplaypos_txt, 250);
+    textFont(specialExtra);
+    text("SPECIAL: Dig", width-menuDisplaypos_txt, 300);
+    text("EXTRA: Onion Vibes (passive)", width-menuDisplaypos_txt, 400);
+    textFont(descriptions);
+    text("Move to an empty space (range: 2).", width-(menuDisplaypos_txt), 300, 300, 100);
+    text("When attacked, deal 2 damage if attacker is adjacent. Ends after 2 turns.", width-(menuDisplaypos_txt), 400, 300, 200);
+  }
+
+  void hpDisplay() {
+    float xpos = -50;
+    pushMatrix();
+    translate(hpDisplaypos*position, height-130);
+    scale(0.2);
+    showOnion(team);
+    scale(1.8);
+    for (int i = 0; i < hp_max; i++) {
+      stroke(255, 0, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    xpos = -50;
+    for (int i = 0; i < hp; i++) {
+      stroke(0, 255, 0);
+      rect(xpos, 120, 5, 40);
+      xpos += 20;
+    }
+    popMatrix();
   }
 }
 
