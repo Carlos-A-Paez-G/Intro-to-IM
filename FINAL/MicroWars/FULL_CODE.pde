@@ -12,6 +12,8 @@ int gameState = TITLE;
 int blue = 0;
 int red = 1;
 
+Chara Dummy = new Chara(); //dummy used whenever there is a need for an empty character to fill something
+
 Defender[] Defenders_B = new Defender[3];
 Defender[] Defenders_R = new Defender[3];
 Swampy[] Swampys_B = new Swampy[3];
@@ -80,9 +82,9 @@ boolean endingTurn = false;
 void setup() {
   size(800, 800);
   //initialize serial port
-  Board = new Serial(this, Serial.list()[0], 9600);
-  Board.bufferUntil('\n');
-  
+  //Board = new Serial(this, Serial.list()[0], 9600);
+  //Board.bufferUntil('\n');
+
   //fullScreen();
   imageMode(CENTER);
   rectMode(CORNER);
@@ -127,11 +129,6 @@ void setup() {
     Onions_B[i] = new Onion(blue, 0, 1000, 1000);
     Onions_R[i] = new Onion(red, 0, 1000, 1000);
   }
-
-
-  ////debug - finding fonts
-  String[] fontList = PFont.list();
-  printArray(fontList);
 }
 
 void draw() {
@@ -228,74 +225,92 @@ void draw() {
     //****REMEMBER TO CHANGE ORDER (menuDisplay -> Act)****
     for (int i = 0; i < Defenders_B.length; i++) {
       if (Defenders_B[i].position != 0 && turn == (i*2)+12) {
+        Defenders_B[i].DefenderStart();
         Defenders_B[i].MenuDisplay();
         Defenders_B[i].Act();
+        Defenders_B[i].extraAction();
       } else if (Defenders_B[i].position == 0 && turn == (i*2)+12) {
         turn++;
       }
       if (Swampys_B[i].position != 0 && turn == (i*2)+7) {
         Swampys_B[i].MenuDisplay();
         Swampys_B[i].Act();
+        Swampys_B[i].extraAction();
       } else if (Swampys_B[i].position == 0 && turn == (i*2)+7) {
         turn++;
       }
       if (StickRobos_B[i].position != 0 && turn == (i*2)+19) {
-        StickRobos_B[i].Act();
+        StickRobos_B[i].RoboStart();
         StickRobos_B[i].MenuDisplay();
+        StickRobos_B[i].Act();
+        StickRobos_B[i].extraAction();
       } else if (StickRobos_B[i].position == 0 && turn == (i*2)+19) {
         turn++;
       }
       if (FightBalls_B[i].position != 0 && turn == 2*i) {
-        FightBalls_B[i].Act();
         FightBalls_B[i].MenuDisplay();
+        FightBalls_B[i].Act();
+        FightBalls_B[i].extraAction();
       } else if (FightBalls_B[i].position == 0 && turn == 2*i) {
         turn++;
       }
       if (FlowerLadys_B[i].position != 0 && turn == (i*2)+24) {
-        FlowerLadys_B[i].Act();
         FlowerLadys_B[i].MenuDisplay();
+        FlowerLadys_B[i].Act();
+        FlowerLadys_B[i].extraAction();
       } else if (FlowerLadys_B[i].position == 0 && turn == (i*2)+24) {
         turn++;
       }
       if (Onions_B[i].position != 0 && turn == (i*2)+31) {
-        Onions_B[i].Act();
+        Onions_R[i].OnionStart();
         Onions_B[i].MenuDisplay();
+        Onions_B[i].Act();
+        Onions_B[i].extraAction();
       } else if (Onions_B[i].position == 0 && turn == (i*2)+31) {
         turn++;
       }
       if (Defenders_R[i].position != 0 && turn == (i*2)+13) {
-        Defenders_R[i].Act();
+        Defenders_R[i].DefenderStart();
         Defenders_R[i].MenuDisplay();
+        Defenders_R[i].Act();
+        Defenders_R[i].extraAction();
       } else if (Defenders_R[i].position == 0 && turn == (i*2)+13) {
         turn++;
       }
       if (Swampys_R[i].position != 0 && turn == (i*2)+6) {
-        Swampys_R[i].Act();
         Swampys_R[i].MenuDisplay();
+        Swampys_R[i].Act();
+        Swampys_R[i].extraAction();
       } else if (Swampys_R[i].position == 0 && turn == (i*2)+6) {
         turn++;
       }
       if (StickRobos_R[i].position != 0 && turn == (i*2)+18) {
-        StickRobos_R[i].Act();
+        StickRobos_R[i].RoboStart();
         StickRobos_R[i].MenuDisplay();
+        StickRobos_R[i].Act();
+        StickRobos_R[i].extraAction();
       } else if (StickRobos_R[i].position == 0 && turn == (i*2)+18) {
         turn++;
       }
       if (FightBalls_R[i].position != 0 && turn == (i*2)+1) {
-        FightBalls_R[i].Act();
         FightBalls_R[i].MenuDisplay();
+        FightBalls_R[i].Act();
+        FightBalls_R[i].extraAction();
       } else if (FightBalls_R[i].position == 0 && turn == (i*2)+1) {
         turn++;
       }
       if (FlowerLadys_R[i].position != 0 && turn == (i*2)+25) {
-        FlowerLadys_R[i].Act();
         FlowerLadys_R[i].MenuDisplay();
+        FlowerLadys_R[i].Act();
+        FlowerLadys_R[i].extraAction();
       } else if (FlowerLadys_R[i].position == 0 && turn == (i*2)+25) {
         turn++;
       }
       if (Onions_R[i].position != 0 && turn == (i*2)+30) {
-        Onions_R[i].Act();
+        Onions_R[i].OnionStart();
         Onions_R[i].MenuDisplay();
+        Onions_R[i].Act();
+        Onions_R[i].extraAction();
       } else if (Onions_R[i].position == 0 && turn == (i*2)+30) {
         turn++;
       }
@@ -303,7 +318,7 @@ void draw() {
 
     //Allows to end turn by pressing y on keyboard
     if (keyPressed) {
-      if (key == 'y' && !endingTurn) {
+      if (key == 'p' && !endingTurn) {
         turn++;
         endingTurn = true;
       }
@@ -311,6 +326,48 @@ void draw() {
 
     //resets turns
     if (turn == 36) {
+      for (int i = 0; i < Defenders_B.length; i++) {
+        if (Defenders_B[i].position != 0) {
+          Defenders_B[i].moved = false;
+          Defenders_B[i].DefenderStarted = false;
+        }
+        if (Swampys_B[i].position != 0) {
+          Swampys_B[i].moved = false;
+        }
+        if (StickRobos_B[i].position != 0) {
+          StickRobos_B[i].moved = false;
+          StickRobos_B[i].RoboStarted = false;
+        }
+        if (FightBalls_B[i].position != 0) {
+          FightBalls_B[i].moved = false;
+        }
+        if (FlowerLadys_B[i].position != 0) {
+          FlowerLadys_B[i].moved = false;
+        }
+        if (Onions_B[i].position != 0) {
+          Onions_B[i].moved = false;
+        }
+        if (Defenders_R[i].position != 0) {
+          Defenders_R[i].moved = false;
+          Defenders_B[i].DefenderStarted = false;
+        }
+        if (Swampys_R[i].position != 0) {
+          Swampys_R[i].moved = false;
+        }
+        if (StickRobos_R[i].position != 0) {
+          StickRobos_R[i].moved = false;
+          StickRobos_R[i].RoboStarted = false;
+        }
+        if (FightBalls_R[i].position != 0) {
+          FightBalls_R[i].moved = false;
+        }
+        if (FlowerLadys_R[i].position != 0) {
+          FlowerLadys_R[i].moved = false;
+        }
+        if (Onions_R[i].position != 0) {
+          Onions_R[i].moved = false;
+        }
+      }
       turn = 0;
     }
 
@@ -386,7 +443,7 @@ void keyReleased() {
   }
 }
 
-//*****CHARACTER_SELECT functions******
+//CHARACTER_SELECT functions
 
 //**BLUE TEAM**
 void SELECT_B() {
@@ -653,7 +710,7 @@ void R_Choice() {
   }
 }
 
-//***CHARACTER PARENT CLASS***
+//**CHARACTER CLASSES**
 
 float hpDisplaypos = 120;
 float menuDisplaypos_x = 250;
@@ -665,6 +722,7 @@ class Chara {
   int hp_max;
   int atk;
   int move;
+  int def = 0;
   int range;
   int team;
   int position; //which member of the team is it (1st, 2nd, 3rd)
@@ -675,8 +733,13 @@ class Chara {
 
   boolean moving;
   boolean moved;
+  //boolean moveCheck = false;
   boolean attacking;
+  boolean attackStart = false;
+  boolean attackCheck = false;
   boolean special;
+  boolean extra;
+  boolean usedExtra = false;
   boolean contactMade; 
 
   //for targetting (moving and attacking)
@@ -684,21 +747,38 @@ class Chara {
   int newy = 0;
 
   void Act() {
+    if (hp > 0) {
+      if (keyPressed) {
+        if (key == 'z') { //replace with button input from Arduino
+          moving = true;
+        }
+        if (key == 'x') {
+          attacking = true;
+        }
+      }
+      if (moving && !attacking && !special && !moved) {
+        if (move == 0) {
+          moved = true;
+        }
+        movement();
+      }
+      if (attacking && !moving && !special) {
+        Attack();
+        attackStart = true;
+      }
 
-    if (keyPressed) {
-      if (key == 'z') { //replace with button input from Arduino
-        moving = true;
-      }
-      if (key == 'x') {
-        attacking = true;
-        println("yoop");
+      //ends turn
+      if (!attacking && !special && !extra && attackStart) {
+        turn++;
+        newx = 0;
+        newy = 0;
+        attackStart = false;
+        attackCheck = false;
       }
     }
-    if (moving && !attacking && !special && !moved) {
-      movement();
-    }
-    if (attacking && !moving && !special) {
-      Attack();
+    //ends turn if dead
+    if (hp <= 0) {
+      turn++;
     }
   }
   void movement() {
@@ -706,6 +786,7 @@ class Chara {
       moved = true; 
       moving = false;
     }
+    boolean collided = false;
     //send signal to X+-m and Y+-m
     textFont(title);
     textAlign(CENTER);
@@ -715,9 +796,47 @@ class Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck();
-    println(abs(cellx-newx)+abs(celly-newy));
-    if ((abs(cellx-newx)+abs(celly-newy))<=move && (newx != 0 && newy != 0) && contactMade) {
-      println("here");
+
+    //prevents overlap
+    for (int i = 0; i < Defenders_B.length; i++) {
+      if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+        collided = true;
+      }
+      if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+        collided = true;
+      }
+      if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+        collided = true;
+      }
+      if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+        collided = true;
+      }
+      if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+        collided = true;
+      }
+      if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+        collided = true;
+      }
+      if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+        collided = true;
+      }
+      if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+        collided = true;
+      }
+      if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+        collided = true;
+      }
+      if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+        collided = true;
+      }
+      if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+        collided = true;
+      }
+      if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+        collided = true;
+      }
+    }
+    if ((abs(cellx-newx)+abs(celly-newy))<=move && (newx != 0 && newy != 0) && contactMade && !collided) {
       cellx = newx;
       celly = newy;
       moving = false;
@@ -725,11 +844,29 @@ class Chara {
       contactMade = false;
       newx = 0;
       newy = 0;
-      println(cellx, celly);
+
+      //this else if is only used when the red team first places their pieces
+    } else if ((this.team == red && cellx == 0 && celly == 0) && (abs(cellx+5-newx)<=move && (newx != 0 && newy != 0) && contactMade && !collided)) {
+      cellx = newx;
+      celly = newy;
+      moving = false;
+      moved = true;
+      contactMade = false;
+      newx = 0;
+      newy = 0;
+    } else if ((this.team == blue && cellx == 0 && celly == 0) && (abs(cellx-newx)<=move && (newx != 0 && newy != 0) && contactMade && !collided)) {
+      cellx = newx;
+      celly = newy;
+      moving = false;
+      moved = true;
+      contactMade = false;
+      newx = 0;
+      newy = 0;
     }
   }
 
   void Attack() {
+    //println("newx = " + newx + " new y = " + newy);
     textFont(title);
     textAlign(CENTER);
     rectMode(CENTER);
@@ -739,63 +876,85 @@ class Chara {
     rect(width/2, height/2, width, height);
     keyboardCheck();
     if (contactMade && (newx != 0 && newy != 0) && abs(cellx-newx)+abs(celly-newy)<=range) {
-
       //check for each possible character to see if the x,y matches
       for (int i = 0; i < Defenders_B.length; i++) {
         if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
-          Swampys_B[i].hp -= atk;
-          attacking = false;
+          takeDamage(Defenders_B[i]);
         }
         if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
-          Swampys_R[i].hp -= atk; 
-          attacking = false;
+          takeDamage(Defenders_R[i]);
         }
         if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
-          Swampys_B[i].hp -= atk;
-          attacking = false;
+          takeDamage(Swampys_B[i]);
         }
         if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
-          Swampys_R[i].hp -= atk; 
-          attacking = false;
+          takeDamage(Swampys_R[i]);
         }
         if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
-          StickRobos_B[i].hp -= atk;
-          attacking = false;
+          takeDamage(StickRobos_B[i]);
         }
         if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
-          StickRobos_R[i].hp -= atk; 
-          attacking = false;
+          takeDamage(StickRobos_R[i]);
         }
         if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
-          FightBalls_B[i].hp -= atk;
-          attacking = false;
+          takeDamage(FightBalls_B[i]);
         }
         if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
-          FightBalls_R[i].hp -= atk; 
-          attacking = false;
+          takeDamage(FightBalls_R[i]);
         }
         if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
-          FightBalls_B[i].hp -= atk;
-          attacking = false;
+          takeDamage(FlowerLadys_B[i]);
         }
         if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
-          FlowerLadys_R[i].hp -= atk; 
-          attacking = false;
+          takeDamage(FlowerLadys_R[i]);
         }
         if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
-          Onions_B[i].hp -= atk;
-          attacking = false;
+          takeDamage(Onions_B[i]);
+          if (this.range == 1) {
+            this.hp -= 2;
+          }
         }
         if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
-          Onions_R[i].hp -= atk; 
+          takeDamage(Onions_R[i]);
+          if (this.range == 1) {
+            this.hp -= 2;
+          }
+        }
+
+        //Ends turn if attack missed
+        if (!attackCheck) {
+          //int t = 0;
+          newx = 0;
+          newy = 0;         
+          textFont(title);
+          textAlign(CENTER);
+          rectMode(CENTER);
+          fill(255, 0, 0);
+          text("Attack Missed!", width/2, height/2, width/2, height-height/4);
+          fill(0, 0, 0, 50);
+          rect(width/2, height/2, width, height);
           attacking = false;
+          extra = false;
+          special = false;
         }
       }
     }
   }
 
+  void takeDamage(Chara C) {
+    if (atk-C.def > 0) {
+      C.hp -= atk-C.def;
+    }
+    newx = 0;
+    newy = 0;
+    attackCheck = true;
+    attacking = false;
+    extra = false;
+    special = false;
+  }
 
-  //for debugging, or controlled failure
+
+  //for debugging, or controller failure
   void keyboardCheck() {
     if (keyPressed) { //replace with LDR input from Arduino
       if (key == 'q') {
@@ -814,22 +973,45 @@ class Chara {
         newx = 4;
         contactMade = true;
       }
-      if (key == 't') {
+      if (key == 'a') {
         newy = 1;
         contactMade = true;
       }
-      if (key == 'y') {
+      if (key == 's') {
         newy = 2;
         contactMade = true;
       }
-      if (key == 'u') {
+      if (key == 'd') {
         newy = 3;
         contactMade = true;
       }
-      if (key == 'i') {
+      if (key == 'f') {
         newy = 4;
         contactMade = true;
       }
+    }
+  }
+
+  void displayLocation() {
+    textFont(plain);
+    textAlign(LEFT);
+    fill(0);
+    text(cellx + " - " + celly, width-200, 50);
+  }
+
+  void mini_displayLocation() {
+    textFont(plain);
+    textAlign(CENTER);
+    fill(0);
+    text(cellx + " - " + celly, 0, 75);
+  }
+
+  void mini_protected() {
+    if (def > 0) {
+      textFont(plain);
+      textAlign(CENTER);
+      fill(0);
+      text("+" + def + "def", 0, 125);
     }
   }
 }
@@ -933,9 +1115,10 @@ void showOnion(int Team){
   popMatrix();
 }
 
-//****CHARACTER CHILD CLASSES****
 class Defender extends Chara {
-
+  Chara Protected = Dummy;
+  boolean shieldOn;
+  boolean DefenderStarted = false;
 
   Defender(int Team, int Pos, int CellX, int CellY) { 
     team = Team;
@@ -954,6 +1137,7 @@ class Defender extends Chara {
     range = 1;
     newx = 0;
     newy = 0;
+    shieldOn = true;
   }
 
   void MenuDisplay() {
@@ -965,10 +1149,15 @@ class Defender extends Chara {
       fill(255, 0, 0);
     }
     rectMode(CORNER);
+    displayLocation();
     text("Ricardo " + position, 200, 100);
     pushMatrix();
     translate(menuDisplaypos_x, height/2);
-    showDefender(team);
+    if (shieldOn) {
+      showDefender(team);
+    } else if (!shieldOn) {
+      showDefender_noShield(team);
+    }
     popMatrix();
     textFont(plain);
     fill(0);
@@ -987,14 +1176,22 @@ class Defender extends Chara {
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
-    if(team == blue){
-    translate(hpDisplaypos*position, height-130);
+    if (team == blue) {
+      translate(hpDisplaypos*position, height-130);
     }
-    if(team == red){
-    translate(hpDisplaypos*(position+3), height-130);
+    if (team == red) {
+      translate(hpDisplaypos*(position+3), height-130);
     }
+    mini_displayLocation();
+    mini_protected();
     scale(0.2);
-    showDefender(team);
+    if (hp > 0) {
+      if (shieldOn) {
+        showDefender(team);
+      } else if (!shieldOn) {
+        showDefender_noShield(team);
+      }
+    }
     scale(1.8);
     for (int i = 0; i < hp_max; i++) {
       stroke(255, 0, 0);
@@ -1009,9 +1206,102 @@ class Defender extends Chara {
     }
     popMatrix();
   }
+
+  void DefenderStart() {
+    if(!DefenderStarted){
+    Protected.def = 0;
+    println(Protected.def);
+    Protected = Dummy;
+    range = 1;
+    DefenderStarted = true;
+    }
+  }
+
+  void extraAction() {
+    if (keyPressed) {
+      if (key == 'c') {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
+    if (!attacking && !moving && special) {
+      Protection();
+      attackStart = true;
+    }
+    if (!attacking && !special && !moving && extra) {
+      ShieldThrow();
+      usedExtra = true;
+      attackStart = true;
+    }
+  }
+
+  void Protection() {
+    textFont(title);
+    textAlign(CENTER);
+    rectMode(CENTER);
+    fill(255, 0, 0);
+    text("Lift the character you want to protect", width/2, height/2, width/2, height/2);
+    fill(0, 0, 0, 50);
+    rect(width/2, height/2, width, height);
+    keyboardCheck();
+    //check for each possible character to see if the x,y matches
+    for (int i = 0; i < Defenders_B.length; i++) {
+      if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+        protect(Defenders_B[i]);
+      }
+      if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+        protect(Defenders_R[i]);
+      }
+      if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+        protect(Swampys_B[i]);
+      }
+      if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+        protect(Swampys_R[i]);
+      }
+      if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+        protect(StickRobos_B[i]);
+      }
+      if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+        protect(StickRobos_R[i]);
+      }
+      if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+        protect(FightBalls_B[i]);
+      }
+      if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+        protect(FightBalls_R[i]);
+      }
+      if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+        protect(FlowerLadys_B[i]);
+      }
+      if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+        protect(FlowerLadys_R[i]);
+      }
+      if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+        protect(Onions_B[i]);
+      }
+      if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+        protect(Onions_R[i]);
+      }
+    }
+  }
+  void protect(Chara C) {
+    C.def += 1;
+    Protected = C;
+    println("here");
+    special = false;
+  }
+
+  void ShieldThrow() {
+    range = 2;
+    shieldOn = false;
+    Attack();
+  }
 }
 
-class FightBall extends Chara{
+class FightBall extends Chara {
 
   FightBall(int Team, int Pos, int CellX, int CellY) {
     team = Team;
@@ -1040,6 +1330,7 @@ class FightBall extends Chara{
       fill(255, 0, 0);
     }
     rectMode(CORNER);
+    displayLocation();
     text("Norm " + position, 200, 100);
     pushMatrix();
     translate(200, height/2);
@@ -1063,14 +1354,18 @@ class FightBall extends Chara{
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
-    if(team == blue){
-    translate(hpDisplaypos*position, height-130);
+    if (team == blue) {
+      translate(hpDisplaypos*position, height-130);
     }
-    if(team == red){
-    translate(hpDisplaypos*(position+3), height-130);
+    if (team == red) {
+      translate(hpDisplaypos*(position+3), height-130);
     }
+    mini_displayLocation();
+    mini_protected();
     scale(0.2);
-    showFightBall(team);
+    if (hp > 0) {
+      showFightBall(team);
+    }
     scale(1.8);
     for (int i = 0; i < hp_max; i++) {
       stroke(255, 0, 0);
@@ -1084,6 +1379,76 @@ class FightBall extends Chara{
       xpos += 20;
     }
     popMatrix();
+  }
+
+  void extraAction() {
+    if (keyPressed) {
+      if (key == 'c') {
+        if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
+    if (!attacking && !special && !moving && extra) {
+      Sacrifice();
+      attackStart = true;
+    }
+  }
+
+  void Sacrifice() {
+    textFont(title);
+    textAlign(CENTER);
+    rectMode(CENTER);
+    fill(255, 0, 0);
+    text("Lift the character you want to sacrifice for", width/2, height/2, width/2, height/2);
+    fill(0, 0, 0, 50);
+    rect(width/2, height/2, width, height);
+    keyboardCheck(); 
+    //check for each possible character to see if the x,y matches
+    for (int i = 0; i < Defenders_B.length; i++) {
+      if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+        giveLife(Defenders_B[i]);
+      }
+      if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+        giveLife(Defenders_R[i]);
+      }
+      if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+        giveLife(Swampys_B[i]);
+      }
+      if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+        giveLife(Swampys_R[i]);
+      }
+      if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+        giveLife(StickRobos_B[i]);
+      }
+      if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+        giveLife(StickRobos_R[i]);
+      }
+      if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+        giveLife(FightBalls_B[i]);
+      }
+      if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+        giveLife(FightBalls_R[i]);
+      }
+      if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+        giveLife(FlowerLadys_B[i]);
+      }
+      if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+        giveLife(FlowerLadys_R[i]);
+      }
+      if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+        giveLife(Onions_B[i]);
+      }
+      if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+        giveLife(Onions_R[i]);
+      }
+    }
+  }
+
+  void giveLife(Chara C) {
+    C.hp += this.hp; 
+    hp = 0;
+    extra = false;
   }
 }
 
@@ -1116,6 +1481,7 @@ class FlowerLady extends Chara {
       fill(255, 0, 0);
     }
     rectMode(CORNER);
+    displayLocation();
     text("Petuña " + position, 200, 100);
     pushMatrix();
     translate(200, height/2.2);
@@ -1145,8 +1511,12 @@ class FlowerLady extends Chara {
     if (team == red) {
       translate(hpDisplaypos*(position+3), height-130);
     }    
+    mini_displayLocation();
+    mini_protected();
     scale(0.2);
-    showFlowerLady(team);
+    if (hp > 0) {
+      showFlowerLady(team);
+    }
     scale(1.8);
     for (int i = 0; i < hp_max; i++) {
       stroke(255, 0, 0);
@@ -1160,6 +1530,139 @@ class FlowerLady extends Chara {
       xpos += 20;
     }
     popMatrix();
+  }
+
+  void extraAction() {
+    if (keyPressed) {
+      if (key == 'c') {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
+    if (!attacking && !moving && special) {
+      Perfume();
+      attackStart = true;
+    }
+    if (!attacking && !special && !moving && extra) {
+      BadBreath();
+      attackStart = true;
+    }
+  }
+
+  void Perfume() {
+    textFont(title);
+    textAlign(CENTER);
+    rectMode(CENTER);
+    fill(255, 0, 0);
+    text("Lift the character you want to perfume", width/2, height/2, width/2, height/2);
+    fill(0, 0, 0, 50);
+    rect(width/2, height/2, width, height);
+    keyboardCheck(); 
+    //check for each possible character to see if the x,y matches
+    for (int i = 0; i < Defenders_B.length; i++) {
+      if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+        givePerfume(Defenders_B[i]);
+      }
+      if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+        givePerfume(Defenders_R[i]);
+      }
+      if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+        givePerfume(Swampys_B[i]);
+      }
+      if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+        givePerfume(Swampys_R[i]);
+      }
+      if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+        givePerfume(StickRobos_B[i]);
+      }
+      if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+        givePerfume(StickRobos_R[i]);
+      }
+      if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+        givePerfume(FightBalls_B[i]);
+      }
+      if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+        givePerfume(FightBalls_R[i]);
+      }
+      if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+        givePerfume(FlowerLadys_B[i]);
+      }
+      if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+        givePerfume(FlowerLadys_R[i]);
+      }
+      if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+        givePerfume(Onions_B[i]);
+      }
+      if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+        givePerfume(Onions_R[i]);
+      }
+    }
+  }
+
+  void givePerfume(Chara C) {
+    C.atk += 2;
+    attacking = false;
+  }
+
+  void BadBreath() {
+    textFont(title);
+    textAlign(CENTER);
+    rectMode(CENTER);
+    fill(255, 0, 0);
+    text("Lift the character whose day you want to ruin", width/2, height/2, width/2, height/2);
+    fill(0, 0, 0, 50);
+    rect(width/2, height/2, width, height);
+    keyboardCheck(); 
+    //check for each possible character to see if the x,y matches
+    for (int i = 0; i < Defenders_B.length; i++) {
+      if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+        weaken(Defenders_B[i]);
+      }
+      if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+        weaken(Defenders_R[i]);
+      }
+      if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+        weaken(Swampys_B[i]);
+      }
+      if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+        weaken(Swampys_R[i]);
+      }
+      if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+        weaken(StickRobos_B[i]);
+      }
+      if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+        weaken(StickRobos_R[i]);
+      }
+      if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+        weaken(FightBalls_B[i]);
+      }
+      if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+        weaken(FightBalls_R[i]);
+      }
+      if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+        weaken(FlowerLadys_B[i]);
+      }
+      if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+        weaken(FlowerLadys_R[i]);
+      }
+      if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+        weaken(Onions_B[i]);
+      }
+      if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+        weaken(Onions_R[i]);
+      }
+    }
+  }
+
+  void weaken(Chara C) {
+    C.atk -= 3;
+    if (C.atk < 0) {
+      C.atk = 0;
+    }
+    extra = false;
   }
 }
 
@@ -1192,6 +1695,7 @@ class Onion extends Chara {
       fill(255, 0, 0);
     }
     rectMode(CORNER);
+    displayLocation();
     text("El Cebollón " + position, 175, 100);
     pushMatrix();
     translate(200, height/2.2);
@@ -1205,10 +1709,10 @@ class Onion extends Chara {
     text("MOVE: " + move, width-menuDisplaypos_txt, 250);
     textFont(specialExtra);
     text("SPECIAL: Dig", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Onion Vibes (passive)", width-menuDisplaypos_txt, 400);
+    text("EXTRA: Onion Vibes (always active)", width-menuDisplaypos_txt, 400, menuDisplaypos_txt, 100);
     textFont(descriptions);
     text("Move to an empty space (range: 2).", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("When attacked, deal 2 damage if attacker is adjacent. Ends after 2 turns.", width-(menuDisplaypos_txt), 400, 300, 200);
+    text("When attacked, deal 2 damage if attacker is adjacent.", width-(menuDisplaypos_txt), 450, 300, 200);
   }
 
   void hpDisplay() {
@@ -1220,8 +1724,12 @@ class Onion extends Chara {
     if (team == red) {
       translate(hpDisplaypos*(position+3), height-130);
     }    
+    mini_displayLocation();
+    mini_protected();
     scale(0.2);
-    showOnion(team);
+    if (hp > 0) {
+      showOnion(team);
+    }
     scale(1.8);
     for (int i = 0; i < hp_max; i++) {
       stroke(255, 0, 0);
@@ -1236,16 +1744,43 @@ class Onion extends Chara {
     }
     popMatrix();
   }
+
+  void OnionStart() {
+    move = 0;
+  }
+
+  void extraAction() {
+    if (keyPressed) {
+      if (key == 'c') {
+        if (!moving) {
+          special = true;
+        }
+      }
+      if (!attacking && !moving && special) {
+        Dig();
+        attackStart = true;
+      }
+    }
+    //ends turn
+    if (!attacking && !special && !extra && attackStart) {
+      turn++;
+      attackStart = false;
+    }
+  }
+
+  void Dig() {
+    int oldx = cellx;
+    int oldy = celly;
+    move = 3;
+    movement();
+    if (oldx != cellx || oldy != celly) {
+      special = false;
+    }
+  }
 }
 
 class StickRobo extends Chara {
-  int hp = 1;
-  int hp_max = 1;
-  int atk = 2; //range is 2
-  int range = 2;
-  int move = 3;
-  int team;
-  int position;
+  boolean RoboStarted = false;
 
   StickRobo(int Team, int Pos, int CellX, int CellY) {
     team = Team;
@@ -1274,6 +1809,7 @@ class StickRobo extends Chara {
       fill(255, 0, 0);
     }
     rectMode(CORNER);
+    displayLocation();
     text("L1uv14 " + position, 200, 100);
     pushMatrix();
     translate(200, height/2);
@@ -1303,8 +1839,12 @@ class StickRobo extends Chara {
     if (team == red) {
       translate(hpDisplaypos*(position+3), height-130);
     }
+    mini_displayLocation();
+    mini_protected();
     scale(0.2);
-    showStickRobo(team);
+    if (hp > 0) {
+      showStickRobo(team);
+    }
     scale(1.8);
     for (int i = 0; i < hp_max; i++) {
       stroke(255, 0, 0);
@@ -1318,6 +1858,49 @@ class StickRobo extends Chara {
       xpos += 20;
     }
     popMatrix();
+  }
+
+  void RoboStart() {
+    if(!RoboStarted){
+    range = 2;
+    move = 3;
+    }
+  }
+
+  void extraAction() {
+    if (keyPressed) {
+      if (key == 'c') {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
+    if (!attacking && !moving && special) {
+      Hug();
+      attackStart = true;
+    }
+    if (!attacking && !special && !moving && extra) {
+      Teleport();
+      attackStart = true;
+    }
+    //ends turn
+    if (!attacking && !special && !extra && attackStart) {
+      turn++;
+      attackStart = false;
+    }
+  }
+
+  void Hug() {
+    atk = 4;
+    range = 1;
+    Attack();
+  }
+
+  void Teleport() {
+    move = 6;
+    movement();
   }
 }
 
@@ -1336,7 +1919,7 @@ class Swampy extends Chara {
     hp = 2;
     hp_max = 2;
     atk = 3;
-    move = 2;
+    move = 3;
     range = 1;
     newx = 0;
     newy = 0;
@@ -1351,6 +1934,7 @@ class Swampy extends Chara {
       fill(255, 0, 0);
     }
     rectMode(CORNER);
+    displayLocation();
     text("María " + position, 200, 100);
     pushMatrix();
     translate(200, height/2);
@@ -1365,10 +1949,10 @@ class Swampy extends Chara {
     text("MOVE: " + move, width-menuDisplaypos_txt, 250);
     textFont(specialExtra);
     text("SPECIAL: Tail Slam", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Tail Flail", width-menuDisplaypos_txt, 400);
+    text("EXTRA: Tail Twist", width-menuDisplaypos_txt, 400);
     textFont(descriptions);
-    text("Does 3 damage. Adjacent foes take 1 damage.", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("Does 2 damage to all adjacent foes. Take 1 damage", width-(menuDisplaypos_txt), 400, 300, 200);
+    text("Does 2 damage and push target. Bumping causes both to take 1 damage.", width-(menuDisplaypos_txt), 300, 300, 100);
+    text("Does 3 damage to all adjacent foes. Take 1 damage", width-(menuDisplaypos_txt), 400, 300, 200);
   }
 
   void hpDisplay() {
@@ -1380,8 +1964,12 @@ class Swampy extends Chara {
     if (team == red) {
       translate(hpDisplaypos*(position+3), height-130);
     }
+    mini_displayLocation();
+    mini_protected();
     scale(0.2);
-    showSwampy(team);
+    if (hp > 0) {
+      showSwampy(team);
+    }
     scale(1.8);
     for (int i = 0; i < hp_max; i++) {
       stroke(255, 0, 0);
@@ -1396,4 +1984,250 @@ class Swampy extends Chara {
     }
     popMatrix();
   }
+
+  void extraAction() {
+    if (keyPressed) {
+      if (key == 'c') {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
+    if (!attacking && !moving && special) {
+      TailSlam();
+      attackStart = true;
+    }
+    if (!attacking && !special && !moving && extra) {
+      TailTwist();
+      attackStart = true;
+    }
+  }
+
+  void TailSlam() {
+    textFont(title);
+    textAlign(CENTER);
+    rectMode(CENTER);
+    fill(255, 0, 0);
+    text("Move the character you've attacked one space back", width/2, height/2, width/2, height/2);
+    fill(0, 0, 0, 50);
+    rect(width/2, height/2, width, height);
+    keyboardCheck(); 
+    //check for each possible character to see if the x,y matches
+    for (int i = 0; i < Defenders_B.length; i++) {
+      if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+        push(Defenders_B[i]);
+      }
+      if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+        push(Defenders_R[i]);
+      }
+      if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+        push(Swampys_B[i]);
+      }
+      if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+        push(Swampys_R[i]);
+      }
+      if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+        push(StickRobos_B[i]);
+      }
+      if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+        push(StickRobos_R[i]);
+      }
+      if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+        push(FightBalls_B[i]);
+      }
+      if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+        push(FightBalls_R[i]);
+      }
+      if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+        push(FlowerLadys_B[i]);
+      }
+      if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+        push(FlowerLadys_R[i]);
+      }
+      if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+        push(Onions_B[i]);
+      }
+      if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+        push(Onions_R[i]);
+      }
+    }
+  }
+
+  void push(Chara C) { //moves the character and deals 1 damage if collided
+    boolean collided = false;
+    Chara victim = Dummy;
+    //send signal to X+-m and Y+-m RGB LEDs
+    //textFont(title);
+    //textAlign(CENTER);
+    //rectMode(CENTER);
+    //fill(255, 0, 0);
+    //text("Move your character on the board", width/2, height/2, width/2, height/2);
+    //fill(0, 0, 0, 50);
+    //rect(width/2, height/2, width, height);
+
+    C.hp -= 2;
+
+    if (this.cellx == C.cellx+1) {
+      newx = C.cellx-1;
+      newy = celly;
+    } else if (this.cellx == C.cellx-1) {
+      newx = C.cellx+1;
+      newy = celly;
+    } else if (this.celly == C.celly+1) {
+      newy = C.celly-1;
+      newx = cellx;
+    } else if (this.celly == C.celly-1) {
+      newy = C.celly+1;
+      newx = cellx;
+    }
+
+    //prevents overlap
+    for (int i = 0; i < Defenders_B.length; i++) {
+      if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+        collided = true;
+        victim = Defenders_B[i];
+      }
+      if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+        collided = true;
+        victim = Defenders_R[i];
+      }
+      if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+        collided = true;
+        victim = Swampys_B[i];
+      }
+      if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+        collided = true;
+        victim = Swampys_R[i];
+      }
+      if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+        collided = true;
+        victim = StickRobos_B[i];
+      }
+      if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+        collided = true;
+        victim = StickRobos_R[i];
+      }
+      if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+        collided = true;
+        victim = FightBalls_B[i];
+      }
+      if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+        collided = true;
+        victim = FightBalls_R[i];
+      }
+      if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+        collided = true;
+        victim = FlowerLadys_B[i];
+      }
+      if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+        collided = true;
+        victim = FlowerLadys_R[i];
+      }
+      if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+        collided = true;
+        victim = Onions_B[i];
+      }
+      if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+        collided = true;
+        victim = Onions_R[i];
+      }
+    }
+
+    if ((abs(cellx-newx)+abs(celly-newy))<=move && (newx != 0 && newy != 0) && contactMade && !collided) {
+      C.cellx = newx;
+      C.celly = newy;
+      moving = false;
+      moved = true;
+      contactMade = false;
+      newx = 0;
+      newy = 0;
+      special = false;
+    } else if (newx == 0 || newx == 5 || newy == 0 || newy == 5) {
+      moving = false;
+      moved = true;
+      contactMade = false;
+      newx = 0;
+      newy = 0;
+      special = false;
+    } else if (collided) {
+      C.hp--;
+      victim.hp--;
+      moving = false;
+      moved = true;
+      contactMade = false;
+      newx = 0;
+      newy = 0;
+      special = false;
+    }
+  }
+
+  void TailTwist() {
+    //checks if any other characters are adjacent
+    for (int n = 0; n < 4; n++) {
+      if (n==0) {
+        newx = cellx-1;
+        newy = celly;
+      }
+      if (n==1) {
+        newx = cellx+1;
+        newy = celly;
+      }
+      if (n==2) {
+        newx = cellx;
+        newy = celly-1;
+      }
+      if (n==3) {
+        newx = cellx;
+        newy = celly+1;
+      }
+      for (int i = 0; i < Defenders_B.length; i++) {
+        if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
+          takeDamage(Defenders_B[i]);
+        }
+        if (Defenders_R[i].cellx == newx && Defenders_R[i].celly == newy) {
+          takeDamage(Defenders_R[i]);
+        }
+        if (Swampys_B[i].cellx == newx && Swampys_B[i].celly == newy) {
+          takeDamage(Swampys_B[i]);
+        }
+        if (Swampys_R[i].cellx == newx && Swampys_R[i].celly == newy) {
+          takeDamage(Swampys_R[i]);
+        }
+        if (StickRobos_B[i].cellx == newx && StickRobos_B[i].celly == newy) {
+          takeDamage(StickRobos_B[i]);
+        }
+        if (StickRobos_R[i].cellx == newx && StickRobos_R[i].celly == newy) {
+          takeDamage(StickRobos_R[i]);
+        }
+        if (FightBalls_B[i].cellx == newx && FightBalls_B[i].celly == newy) {
+          takeDamage(FightBalls_B[i]);
+        }
+        if (FightBalls_R[i].cellx == newx && FightBalls_R[i].celly == newy) {
+          takeDamage(FightBalls_R[i]);
+        }
+        if (FlowerLadys_B[i].cellx == newx && FlowerLadys_B[i].celly == newy) {
+          takeDamage(FlowerLadys_B[i]);
+        }
+        if (FlowerLadys_R[i].cellx == newx && FlowerLadys_R[i].celly == newy) {
+          takeDamage(FlowerLadys_R[i]);
+        }
+        if (Onions_B[i].cellx == newx && Onions_B[i].celly == newy) {
+          takeDamage(Onions_B[i]);
+          if (this.range == 1) {
+            this.hp -= 2;
+          }
+        }
+        if (Onions_R[i].cellx == newx && Onions_R[i].celly == newy) {
+          takeDamage(Onions_R[i]);
+          if (this.range == 1) {
+            this.hp -= 2;
+          }
+        }
+      }
+    }
+    hp--; //deals damage to itself
+  }
 }
+
