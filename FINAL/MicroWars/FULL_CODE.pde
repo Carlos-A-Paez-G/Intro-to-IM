@@ -1290,6 +1290,7 @@ class Defender extends Chara {
     }
   }
 
+//**DOES SPECIAL AND EXTRA MOVES**
   void extraAction() {
     if (keyPressed) {
       if (key == 'c') {
@@ -1853,11 +1854,9 @@ class Onion extends Chara {
   void extraAction() {
     if (keyPressed) {
       if (key == 'c') {
-        if (!moving) {
-          special = true;
-        }
+        special = true;
       }
-      if (!attacking && !moving && special) {
+      if (!attacking && special) {
         Dig();
         attackStart = true;
       }
@@ -1872,13 +1871,12 @@ class Onion extends Chara {
   void Dig() {
     int oldx = cellx;
     int oldy = celly;
-    println(move);
     move = 3;
     movement();
     if (oldx != cellx || oldy != celly) {
       special = false;
-      println("hm");
     }
+    println(special);
   }
 }
 
@@ -2083,7 +2081,7 @@ class Swampy extends Chara {
     hp = 2;
     hp_max = 2;
     atk = 3;
-    move = 3;
+    move = 2;
     range = 1;
     newx = 0;
     newy = 0;
@@ -2174,7 +2172,7 @@ class Swampy extends Chara {
     textAlign(CENTER);
     rectMode(CENTER);
     fill(255, 0, 0);
-    text("Move the character you've attacked one space back", width/2, height/2, width/2, height/2);
+    text("Move the target one space back", width/2, height/2, width/2, height/2);
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck(); 
@@ -2223,13 +2221,6 @@ class Swampy extends Chara {
     boolean collided = false;
     Chara victim = Dummy;
     //send signal to X+-m and Y+-m RGB LEDs
-    //textFont(title);
-    //textAlign(CENTER);
-    //rectMode(CENTER);
-    //fill(255, 0, 0);
-    //text("Move your character on the board", width/2, height/2, width/2, height/2);
-    //fill(0, 0, 0, 50);
-    //rect(width/2, height/2, width, height);
 
     C.hp -= 2;
 
