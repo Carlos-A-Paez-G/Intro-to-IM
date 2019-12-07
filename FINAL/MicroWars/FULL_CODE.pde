@@ -1,7 +1,16 @@
+//All art was created by Carlos Páez (yes, me) using Aseprite. 
+//Font "8bitOperatorPlus" downloaded from 1001freefonts.com/8-bit-operator.font
+
 import processing.serial.*;
 
+//Arduino communication variables
 Serial Board;
+int[] serialInArray = new int[2];    // Where we'll put what we receive (change the size of the array if needed
+int serialCount = 0;                 // A count of how many bytes we receive
+boolean firstContact = false;        // Whether we've heard from thea microcontroller
+String BoardInput; //checks for LDR inputs
 
+//general variables
 int TITLE = 0;
 int CHARA_SELECT = 1;
 int GAME = 2;
@@ -14,8 +23,8 @@ int gameState = TITLE;
 int blue = 0;
 int red = 1;
 
+//Characters
 Chara Dummy = new Chara(); //dummy used whenever there is a need for an empty character to fill something
-
 Defender[] Defenders_B = new Defender[3];
 Defender[] Defenders_R = new Defender[3];
 Swampy[] Swampys_B = new Swampy[3];
@@ -37,10 +46,10 @@ PFont descriptions;
 PFont plain;
 PFont specialExtra;
 
-int[][] cells = new int[][]{
-  new int[] {1, 2, 3, 4}, 
-  new int[] {1, 2, 3, 4}, 
-};
+//int[][] cells = new int[][]{
+//  new int[] {1, 2, 3, 4}, 
+//  new int[] {1, 2, 3, 4}, 
+//};
 
 String characters[] = {"DefenderN_B", "DefenderN_R", "Defender_B", "Defender_R", "Swampy_R", "Swampy_B", "StickRobo_B", "StickRobo_R", "FightBall_R", "FightBall_B", "FlowerLady_R", "FlowerLady_B", "Onion_B", "Onion_R"};
 PImage charaPictures[] = new PImage[14];
@@ -84,8 +93,9 @@ boolean endingTurn = false;
 void setup() {
   size(800, 800);
   //initialize serial port
-  //Board = new Serial(this, Serial.list()[0], 9600);
-  //Board.bufferUntil('\n');
+  Board = new Serial(this, Serial.list()[0], 9600);
+  Board.clear();
+  Board.bufferUntil('\n');
 
   //fullScreen();
   imageMode(CENTER);
@@ -134,7 +144,8 @@ void setup() {
 }
 
 void draw() {
-  //draw background
+  BoardInput = Board.readStringUntil('\n');
+ // println(BoardInput);
   background(255);
 
   if (gameState == TITLE) {
@@ -511,7 +522,39 @@ void keyReleased() {
 
 //**BLUE TEAM**
 void SELECT_B() {
+  //Selects characters using Arduino buttons
+  if (SELECT_tB < 3) {
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("R1")) {
+        cB[SELECT_tB] = color(255, 0, 0);
+        if (!SELECT_redB) {
+          SELECT_tB++;
+        }
+        SELECT_redB = true;
+      }
+      if (BoardInput.equals("G1")) {
+        cB[SELECT_tB] = color(0, 255, 0);
+        if (!SELECT_greenB) {
+          SELECT_tB++;
+        }
+        SELECT_greenB = true;
+      }
+      if (BoardInput.equals("B1")) {
+        cB[SELECT_tB] = color(0, 0, 255);
+        if (!SELECT_blueB) {
+          SELECT_tB++;
+        }
+        SELECT_blueB = true;
+      }
+    }
+  }
+  //Resets the selection when button is released
+  if (SELECT_tB == 3 && BoardInput == null) {
+    SELECT_Breset();
+  }
 
+  //Selects characters using keyboard
   if (keyPressed) {
     if (SELECT_tB < 3) {
       if (key == 'a') {
@@ -663,7 +706,37 @@ void posReset_B() {
 
 //**RED TEAM**
 void SELECT_R() {
-
+//Selects characters using Arduino buttons
+  if (SELECT_tR < 3) {
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("R2")) {
+        cR[SELECT_tR] = color(255, 0, 0);
+        if (!SELECT_redR) {
+          SELECT_tR++;
+        }
+        SELECT_redR = true;
+      }
+      if (BoardInput.equals("G2")) {
+        cR[SELECT_tR] = color(0, 255, 0);
+        if (!SELECT_greenR) {
+          SELECT_tR++;
+        }
+        SELECT_greenR = true;
+      }
+      if (BoardInput.equals("B2")) {
+        cR[SELECT_tR] = color(0, 0, 255);
+        if (!SELECT_blueR) {
+          SELECT_tR++;
+        }
+        SELECT_blueR = true;
+      }
+    }
+  }
+  //Resets the selection when button is released
+  if (SELECT_tR == 3 && BoardInput == null) {
+    SELECT_Rreset();
+  }
   if (keyPressed) {
     if (SELECT_tR < 3) {
       if (key == 'j') {
@@ -776,6 +849,25 @@ void R_Choice() {
 
 //**CHARACTER CLASSES**
 
+
+/*movement prediction array size formula
+ 
+ PVector[] predictions = new PVector[4*(move((1+move)/2)];
+ PVector locationCheck = new PVector(0,0);
+ PVector locationCurrent = new PVector(cellx, celly);
+ int placeCount = 0;
+ for(int x = 1; x <= 4; x++){
+ for(int y = 1; y <= 4; y++){
+ locationCheck.x = x;
+ locationCheck.y = y;
+ PVector dist = locationCurrent.sub(locationCheck);
+ if(abs(cellx-locationCheck.x)+abs(celly-locationCheck.y))<=move){
+ //light up corresponding LEDs 
+ }
+ }
+ }
+ */
+
 float hpDisplaypos = 120;
 float menuDisplaypos_x = 250;
 float menuDisplaypos_y = 100;
@@ -863,8 +955,9 @@ class Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck();
+    BoardCheck();
 
-    //prevents overlap
+    //prevents overlap. also prevents moving onto same spot
     for (int i = 0; i < Defenders_B.length; i++) {
       if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
         collided = true;
@@ -932,6 +1025,16 @@ class Chara {
       turn++;
       newx = 0;
       newy = 0;
+    }
+    //allows you to press "y" to exit movement (to avoid softlocking)
+    if (keyPressed) {
+      if (key == 'y') {
+        moving = false;
+        moved = true;
+        contactMade = false;
+        newx = 0;
+        newy = 0;
+      }
     }
   }
 
@@ -1025,7 +1128,31 @@ class Chara {
     extra = false;
     special = false;
   }
+  //for checking input from LDRs
 
+  void BoardCheck() {
+          println("hey");
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("A - 1")) {
+        newx = 1;
+        newy = 1;
+        contactMade = true;
+      } else if (BoardInput.equals("A - 2")) {
+        newx = 1;
+        newy = 2;
+        contactMade = true;
+      } else if (BoardInput.equals("A - 3")) {
+        newx = 1;
+        newy = 3;
+        contactMade = true;
+      } else if (BoardInput.equals("A - 4")) {
+        newx = 1;
+        newy = 4;
+        contactMade = true;
+      }
+    }
+  }
 
   //for debugging, or controller failure
   void keyboardCheck() {
@@ -1069,7 +1196,15 @@ class Chara {
     textFont(plain);
     textAlign(LEFT);
     fill(0);
-    text(cellx + " - " + celly, width-200, 50);
+    if (cellx == 1) {
+      text("A - " + celly, width-200, 50);
+    } else if (cellx == 2) {
+      text("B - " + celly, width-200, 50);
+    } else if (cellx == 3) {
+      text("C - " + celly, width-200, 50);
+    } else if (cellx == 4) {
+      text("D - " + celly, width-200, 50);
+    }
   }
 
   void mini_displayLocation() {
@@ -1896,7 +2031,7 @@ class StickRobo extends Chara {
     hp = 1;
     hp_max = 1;
     atk = 2;
-    move = 3;
+    move = 2;
     range = 2;
     newx = 0;
     newy = 0;
