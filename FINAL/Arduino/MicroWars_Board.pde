@@ -10,47 +10,6 @@
     E1--  --E3--  --E5
 */
 
-//RGB LED pins
-const int A1_R = 2;
-const int A1_G = 3;
-const int A1_B = 4;
-const int A3_R = 5;
-const int A3_G = 6;
-const int A3_B = 7;
-const int A5_R = 8;
-const int A5_G = 9;
-const int A5_B = 10;
-const int B2_R = 11;
-const int B2_G = 12;
-const int B2_B = 13;
-const int B4_R = 14;
-const int B4_G = 15;
-const int B4_B = 16;
-const int C1_R = 17;
-const int C1_G = 18;
-const int C1_B = 19;
-const int C3_R = 20;
-const int C3_G = 21;
-const int C3_B = 22;
-const int C5_R = 23;
-const int C5_G = 24;
-const int C5_B = 25;
-const int D2_R = 26;
-const int D2_G = 27;
-const int D2_B = 28;
-const int D4_R = 29;
-const int D4_G = 30;
-const int D4_B = 31;
-const int E1_R = 32;
-const int E1_G = 33;
-const int E1_B = 34;
-const int E3_R = 35;
-const int E3_G = 36;
-const int E3_B = 37;
-const int E5_R = 38;
-const int E5_G = 39;
-const int E5_B = 40;
-
 //Buttons Pins
 const int RED_1 = 41;
 const int GREEN_1 = 42;
@@ -58,6 +17,9 @@ const int BLUE_1 = 43;
 const int RED_2 = 44;
 const int GREEN_2 = 45;
 const int BLUE_2 = 46;
+
+//int t = 0;
+//const int bufferTime = 10000;
 
 //LDR pins
 const int a1 = A0;
@@ -77,74 +39,84 @@ const int d2 = A13;
 const int d3 = A14;
 const int d4 = A15;
 
-
-
-
+//For measuring change in LDR reading
+int LDRthreshold = 250;
+float prev_a1 = 0;
+float prev_a2 = 0;
+float prev_a3 = 0;
+float prev_a4 = 0;
 
 void setup() {
-  for (int i = 2; i <= 46; i++) {
+  Serial.begin(9600);
+  for (int i = 2; i <= 40; i++) {
     pinMode(OUTPUT, i);
   }
-  Serial.begin(9600);
+  for (int i = 41; i <= 46; i++) {
+    pinMode(INPUT, i);
+  }
+  //  while (!Serial) {
+  //    ; // wait for serial port to connect. Needed for native USB port only
+  //  }
+  //  establishContact();
 }
 
 void loop() {
-  //**READ LDRs**
-  float v - a1 = analogRead(a1);
-  //  Serial.print(v-a1);
-  float v - a2 = analogRead(a2);
-  //  Serial.print(v-a2);
-  float v - a3 = analogRead(a3);
-  //  Serial.print(v-a3);
-  float v - a4 = analogRead(a4);
-  //  Serial.print(v-a4);
-  float v - b1 = analogRead(b1);
-  //  Serial.print(v-b1);
-  float v - b2 = analogRead(b2);
-  //  Serial.print(v-b2);
-  float v - b3 = analogRead(b3);
-  //  Serial.print(v - b3);
-  float v - b4 = analogRead(b4);
-  //  Serial.print(v - b4);
-  float v - c1 = analogRead(c1);
-  //  Serial.print(v - c1);
-  float v - c2 = analogRead(c2);
-  //  Serial.print(v - c2);
-  float v - c3 = analogRead(c3);
-  //  Serial.print(v - c3);
-  float v - c4 = analogRead(c4);
-  //  Serial.print(v - c4);
-  float v - d1 = analogRead(d1);
-  //  Serial.print(v - d1);
-  float v - d2 = analogRead(d2);
-  //  Serial.print(v - d2);
-  float v - d3 = analogRead(d3);
-  //  Serial.print(v - d3);
-  float v - d4 = analogRead(d4);
-  //  Serial.print(v - d4);
+  //if (Serial.available() > 0) {
 
-  //**READ BUTTONS**
+  buttonCheck();
+  //}
+
+  //**LDR'S**
+  float v_a1 = analogRead(A0);
+  if (abs(v_a1 - prev_a1) > LDRthreshold) {
+    Serial.println("A - 1");
+    prev_a1 = v_a1;
+  }
+  float v_a2 = analogRead(A1);
+  if (abs(v_a2 - prev_a2) > LDRthreshold) {
+    Serial.println("A - 2");
+    prev_a2 = v_a2;
+  }
+  float v_a3 = analogRead(A2);
+  if (abs(v_a3 - prev_a3) > LDRthreshold) {
+    Serial.println("A - 3");
+    prev_a3 = v_a3;
+  }
+  float v_a4 = analogRead(A3);
+ // Serial.println(v_a4);
+  if (abs(v_a4 - prev_a4) > LDRthreshold) {
+    Serial.println("A - 4");
+    prev_a4 = v_a4;
+  }
+
+}
+
+void buttonCheck() {
+  //**Checking buttons**
   if (digitalRead(RED_1) == 1) {
-    //do some serialWrite thingy
+    Serial.println("R1");
   }
   if (digitalRead(GREEN_1) == 1) {
-    //do some serialWrite thingy
+    Serial.println("G1");
   }
-  if (digitalRead(BLUE_1) == 1) {
-    //do some serialWrite thingy
+  //Serial.println("waiting");
+  if (digitalRead(BLUE_1) == HIGH) {
+    Serial.println("B1");
   }
   if (digitalRead(RED_2) == 1) {
-    //do some serialWrite thingy
+    Serial.println("R2");
   }
   if (digitalRead(GREEN_2) == 1) {
-    //do some serialWrite thingy
+    Serial.println("G2");
   }
   if (digitalRead(BLUE_2) == 1) {
-    //do some serialWrite thingy
+    Serial.println("B2");
   }
+}
 
-  //**LIGHT UP RGB LEDs -- RED COLOR**
-  
-  digitalWrite(
-  
+void establishContact() {
+  while (Serial.available() <= 0) {
+    Serial.print('A');   // send a capital A
+    delay(300);
+  }
 }
