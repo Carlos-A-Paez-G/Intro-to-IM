@@ -1130,8 +1130,7 @@ class Chara {
   }
   //for checking input from LDRs
 
-  void BoardCheck() {
-          println("hey");
+  void BoardCheck() { //put this everywhere that you see a keyBoardCheck();
     if (BoardInput != null) {
       BoardInput = trim(BoardInput);
       if (BoardInput.equals("A - 1")) {
@@ -1148,6 +1147,54 @@ class Chara {
         contactMade = true;
       } else if (BoardInput.equals("A - 4")) {
         newx = 1;
+        newy = 4;
+        contactMade = true;
+      } else if (BoardInput.equals("B - 1")) {
+        newx = 2;
+        newy = 1;
+        contactMade = true;
+      } else if (BoardInput.equals("B - 2")) {
+        newx = 2;
+        newy = 2;
+        contactMade = true;
+      } else if (BoardInput.equals("B - 3")) {
+        newx = 2;
+        newy = 3;
+        contactMade = true;
+      } else if (BoardInput.equals("B - 4")) {
+        newx = 2;
+        newy = 4;
+        contactMade = true;
+      } else if (BoardInput.equals("C - 1")) {
+        newx = 3;
+        newy = 1;
+        contactMade = true;
+      } else if (BoardInput.equals("C - 2")) {
+        newx = 3;
+        newy = 2;
+        contactMade = true;
+      } else if (BoardInput.equals("C - 3")) {
+        newx = 3;
+        newy = 3;
+        contactMade = true;
+      } else if (BoardInput.equals("C - 4")) {
+        newx = 3;
+        newy = 4;
+        contactMade = true;
+      } else if (BoardInput.equals("D - 1")) {
+        newx = 4;
+        newy = 1;
+        contactMade = true;
+      } else if (BoardInput.equals("D - 2")) {
+        newx = 4;
+        newy = 2;
+        contactMade = true;
+      } else if (BoardInput.equals("D - 3")) {
+        newx = 4;
+        newy = 3;
+        contactMade = true;
+      } else if (BoardInput.equals("D - 4")) {
+        newx = 4;
         newy = 4;
         contactMade = true;
       }
