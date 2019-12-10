@@ -10,6 +10,10 @@
     E1--  --E3--  --E5
 */
 
+//------ADD THE PREV CONSTANTS FOR b thru d-------
+
+
+
 //Buttons Pins
 const int RED_1 = 41;
 const int GREEN_1 = 42;
@@ -40,11 +44,23 @@ const int d3 = A14;
 const int d4 = A15;
 
 //For measuring change in LDR reading
-int LDRthreshold = 250;
+int LDRthreshold = 150;
 float prev_a1 = 0;
 float prev_a2 = 0;
 float prev_a3 = 0;
 float prev_a4 = 0;
+float prev_b1 = 0;
+float prev_b2 = 0;
+float prev_b3 = 0;
+float prev_b4 = 0;
+float prev_c1 = 0;
+float prev_c2 = 0;
+float prev_c3 = 0;
+float prev_c4 = 0;
+float prev_d1 = 0;
+float prev_d2 = 0;
+float prev_d3 = 0;
+float prev_d4 = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -61,13 +77,11 @@ void setup() {
 }
 
 void loop() {
-  //if (Serial.available() > 0) {
-
   buttonCheck();
-  //}
 
   //**LDR'S**
   float v_a1 = analogRead(A0);
+  //Serial.println(v_a1);
   if (abs(v_a1 - prev_a1) > LDRthreshold) {
     Serial.println("A - 1");
     prev_a1 = v_a1;
@@ -87,6 +101,71 @@ void loop() {
   if (abs(v_a4 - prev_a4) > LDRthreshold) {
     Serial.println("A - 4");
     prev_a4 = v_a4;
+  }
+  float v_b1 = analogRead(A4);
+  if (abs(v_b1 - prev_b1) > LDRthreshold) {
+    Serial.println("B - 1");
+    prev_b1 = v_b1;
+  }
+  float v_b2 = analogRead(A5);
+  if (abs(v_b2 - prev_b2) > LDRthreshold) {
+    Serial.println("B - 2");
+    prev_b2 = v_b2;
+  }
+  float v_b3 = analogRead(A6);
+  if (abs(v_b3 - prev_b3) > LDRthreshold) {
+    Serial.println("B - 3");
+    prev_b3 = v_b3;
+  }
+  float v_b4 = analogRead(A7);
+ // Serial.println(v_b4);
+  if (abs(v_b4 - prev_b4) > LDRthreshold) {
+    Serial.println("B - 4");
+    prev_b4 = v_b4;
+  }
+
+  float v_c1 = analogRead(A8);
+  if (abs(v_c1 - prev_c1) > LDRthreshold) {
+    Serial.println("C - 1");
+    prev_c1 = v_c1;
+  }
+  float v_c2 = analogRead(A9);
+  if (abs(v_c2 - prev_c2) > LDRthreshold) {
+    Serial.println("C - 2");
+    prev_c2 = v_c2;
+  }
+  float v_c3 = analogRead(A10);
+  if (abs(v_c3 - prev_c3) > LDRthreshold) {
+    Serial.println("C - 3");
+    prev_c3 = v_c3;
+  }
+  float v_c4 = analogRead(A11);
+ // Serial.println(v_a4);
+  if (abs(v_c4 - prev_c4) > LDRthreshold) {
+    Serial.println("C - 4");
+    prev_c4 = v_c4;
+  }
+
+  float v_d1 = analogRead(A12);
+  if (abs(v_d1 - prev_d1) > LDRthreshold) {
+    Serial.println("D - 1");
+    prev_d1 = v_d1;
+  }
+  float v_d2 = analogRead(A13);
+  if (abs(v_d2 - prev_d2) > LDRthreshold) {
+    Serial.println("D - 2");
+    prev_d2 = v_d2;
+  }
+  float v_d3 = analogRead(A14);
+  if (abs(v_d3 - prev_d3) > LDRthreshold) {
+    Serial.println("D - 3");
+    prev_d3 = v_d3;
+  }
+  float v_d4 = analogRead(A15);
+ // Serial.println(v_a4);
+  if (abs(v_d4 - prev_d4) > LDRthreshold) {
+    Serial.println("D - 4");
+    prev_d4 = v_d4;
   }
 
 }
