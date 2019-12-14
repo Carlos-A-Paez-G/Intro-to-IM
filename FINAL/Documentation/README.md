@@ -90,14 +90,45 @@ The board could have also used a better treatment in terms of aesthetics, perhap
 
 The digital interface of the game can also still be worked on. As mentioned before, there are bugs and text that cannot be read. But there is also the fact that the red text that tells you what to do sometimes blends with the red features of the red team characters. 
 
+The presentation on the physical component could also be tightened. I don’t think the board felt appealing to use, and for many it was probably unapproachable and probably not very nice to use. In fact, a friend of mine who played the game several times simply learned the shortcuts on the keyboard and was using that instead of the board. 
+
 # **FEEDBACK FROM USER TESTING**
 
 Because making my board proved to be a complicated ordeal with many parts that did not come together until very late, I was not able to properly “user test” my final. However, I was able to play test the mechanics of the game. I did this twice, once using paper and once using an unfinished version of the board. Both times the players said that they wished that they played more than what they did, and said that there seemed to be a lot of complicated things happening in the game.
 
 When I playtested with the cardboard prototype, one player (Hatim, pictured below) also said that the blocks were the right size to feel really well on one’s hand. 
 
+Much more testing should have been done on this project, as it relied heavily on its mechanics working effectively with each other, but this was very hard to do due to the time constraints.
 
+*Image of playtest with board prototype*
 
+![Playtest](Playtesting.jpg)
+
+# **IMAGES**
+
+*Character blocks*
+
+![Blocks](Blocks.jpg)
+
+*Blocks spread on the board*
+
+![BlockBoard](BlocksBoard.jpg)
+
+*Side view of the board, where the buttons are*
+
+![Side](BoardSide.jpg)
+
+*The board with nothing on it. The numbers and letters on the board are the locations that are displayed on the screen for each character*
+
+![Board](JustBoard.jpg)
+
+*Final look at the cables*
+
+![Cables](CablesFinal.jpg)
+
+*A look at the solderable breadboard*
+
+![Bread](CircuitBoard.jpg)
 
 
 
