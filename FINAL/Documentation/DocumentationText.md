@@ -32,7 +32,8 @@ Out of all the characters, it is the only one that is recognizably human, which 
 
 # SWAMP MONSTER (María)
 
-![SwampMonster](Swamp_Monster.png)
+![SwampMonster](SwampMonster.png)
+
 
 
 
