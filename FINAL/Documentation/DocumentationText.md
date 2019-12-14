@@ -1,4 +1,4 @@
-##**CONCEPT**
+## **CONCEPT**
 
 *Micro Wars* is a turn-based strategy game that preserves the depth and pacing of larger-scale strategic games, while trying to make it more accessible. The game is controlled through a physical board that takes player inputs and a screen that uses supporting images to instruct the players on what to do.
 
@@ -8,7 +8,7 @@ The physical interface is meant to make the game more accessible in the context 
 
 [[How?]]
 
-##**BEHAVIOR**
+## **BEHAVIOR**
 
 Here is a [link](https://docs.google.com/document/d/1gmuQoXyX3fguGp9TEuZXX2jHlozByviMlpZIkkNpt-E/edit?usp=sharing) to the manual for the game. It briefly explains the rules of the game and how to carry out different actions, as well as what are the keyboard shortcuts to play the game in case the board malfunctions. 
 
