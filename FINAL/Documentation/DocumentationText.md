@@ -26,5 +26,5 @@ Below is a description of every character. I’ve put a screenshot of how their 
 
 # DEFENDER (Ricardo)
 
-![DefenderPhoto](/Images/Defender.png) ![GitHub Logo](/images/logo.png)
+![DefenderPhoto](Defender.png) 
 
