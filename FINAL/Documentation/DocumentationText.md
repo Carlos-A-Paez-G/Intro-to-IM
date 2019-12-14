@@ -24,7 +24,7 @@ Each character has a certain amount of Hit Points (HP) and these are reduced whe
 
 Below is a description of every character. I’ve put a screenshot of how their attacks and stats are described in the game, as well as an explanation of what each character is trying to achieve in the greater context of the game.
 
-#DEFENDER (Ricardo)
+# DEFENDER (Ricardo)
 
-![DefenderPhoto](/Images/Defender.png)
+![DefenderPhoto](/Images/Defender.png) ![GitHub Logo](/images/logo.png)
 
