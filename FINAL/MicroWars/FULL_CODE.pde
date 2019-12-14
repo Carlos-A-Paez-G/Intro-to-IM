@@ -1,4 +1,4 @@
-//All art was created by Carlos Páez (yes, me) using Aseprite. 
+//All art was created using Aseprite. 
 //Font "8bitOperatorPlus" downloaded from 1001freefonts.com/8-bit-operator.font
 
 import processing.serial.*;
@@ -91,6 +91,7 @@ int turn = 0;
 boolean endingTurn = false;
 
 void setup() {
+  //fullScreen();
   size(800, 800);
   //initialize serial port
   Board = new Serial(this, Serial.list()[0], 9600);
@@ -145,7 +146,7 @@ void setup() {
 
 void draw() {
   BoardInput = Board.readStringUntil('\n');
- // println(BoardInput);
+  println(BoardInput);
   background(255);
 
   if (gameState == TITLE) {
@@ -167,7 +168,7 @@ void draw() {
 
     //draws corresponding character
     pushMatrix();
-    translate(400, 400);
+    translate(width/2, height/2);
     //scales according to which character is chosen
     if (choice == 2 || choice == 3 || choice == 4 || choice == 5 || choice == 8 || choice == 9 ) {
       scale(0.5);
@@ -196,7 +197,7 @@ void draw() {
 
     textFont(title);
     fill(0, 0, 255);
-    text("BLUE TEAM", 200, 100);
+    text("BLUE TEAM", width/4, height/8);
     if (B_ChoiceCount < 3) {
       SELECT_B();
     }
@@ -204,7 +205,7 @@ void draw() {
 
     //Red Team loop
     fill(255, 0, 0);
-    text("RED TEAM", width-200, 100);
+    text("RED TEAM", width-width/4, height/8);
     if (R_ChoiceCount < 3) {
       SELECT_R();
     }
@@ -587,7 +588,7 @@ void drawChosenB() {
   noStroke();
   if (SELECT_tB > 0) {
     fill(cB[0]);
-    ellipse(30, height-40, 20, 20);
+    ellipse(30, height-height/20, 20, 20);
   }
   if (SELECT_tB > 1) {
     fill(cB[1]);
@@ -850,7 +851,7 @@ void R_Choice() {
 //**CHARACTER CLASSES**
 
 
-/*movement prediction array size formula
+/*movement prediction array size formula (would have been for LED's - could be used for a fully digital  version)
  
  PVector[] predictions = new PVector[4*(move((1+move)/2)];
  PVector locationCheck = new PVector(0,0);
@@ -906,7 +907,17 @@ class Chara {
 
   void Act() {
     if (hp > 0) {
+      if (BoardInput != null) {
+        BoardInput = trim(BoardInput);
+        if (BoardInput.equals("R2") ||BoardInput.equals("R1")) {
+          moving = true;
+        }
+        if (BoardInput.equals("G2") || BoardInput.equals("G1")) {
+          attacking = true;
+        }
+      }
       if (keyPressed) {
+
         if (key == 'z') { //replace with button input from Arduino
           moving = true;
         }
@@ -1047,6 +1058,7 @@ class Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck();
+    BoardCheck();
     if (contactMade && (newx != 0 && newy != 0) && abs(cellx-newx)+abs(celly-newy)<=range) {
       //check for each possible character to see if the x,y matches
       for (int i = 0; i < 3; i++) {
@@ -1133,6 +1145,7 @@ class Chara {
   void BoardCheck() { //put this everywhere that you see a keyBoardCheck();
     if (BoardInput != null) {
       BoardInput = trim(BoardInput);
+      println(BoardInput);
       if (BoardInput.equals("A - 1")) {
         newx = 1;
         newy = 1;
@@ -1244,13 +1257,13 @@ class Chara {
     textAlign(LEFT);
     fill(0);
     if (cellx == 1) {
-      text("A - " + celly, width-200, 50);
+      text("A - " + celly, 3*width/4, height/16);
     } else if (cellx == 2) {
-      text("B - " + celly, width-200, 50);
+      text("B - " + celly, 3*width/4, height/16);
     } else if (cellx == 3) {
-      text("C - " + celly, width-200, 50);
+      text("C - " + celly, 3*width/4, height/16);
     } else if (cellx == 4) {
-      text("D - " + celly, width-200, 50);
+      text("D - " + celly, 3*width/4, height/16);
     }
   }
 
@@ -1258,7 +1271,15 @@ class Chara {
     textFont(plain);
     textAlign(CENTER);
     fill(0);
-    text(cellx + " - " + celly, 0, 75);
+    if (cellx == 1) {
+      text("A - " + celly, 0, height/10.6666);
+    } else if (cellx == 2) {
+      text("B - " + celly, 0, height/10.6666);
+    } else if (cellx == 3) {
+      text("C - " + celly, 0, height/10.6666);
+    } else if (cellx == 4) {
+      text("D - " + celly, 0, height/10.6666);
+    }
   }
 
   void mini_protected() {
@@ -1266,7 +1287,7 @@ class Chara {
       textFont(plain);
       textAlign(CENTER);
       fill(0);
-      text("+" + def + "def", 0, 125);
+      text("+" + def + "def", 0, height/6.4);
     }
   }
 }
@@ -1405,7 +1426,7 @@ class Defender extends Chara {
     }
     rectMode(CORNER);
     displayLocation();
-    text("Ricardo " + position, 200, 100);
+    text("Ricardo " + position, width/4, height/8);
     pushMatrix();
     translate(menuDisplaypos_x, height/2);
     if (shieldOn) {
@@ -1417,25 +1438,25 @@ class Defender extends Chara {
     textFont(plain);
     fill(0);
     textAlign(LEFT);
-    text("HP: " + hp, width-menuDisplaypos_txt, 150);
-    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
-    text("MOVE: " + move, width-menuDisplaypos_txt, 250);
+    text("HP: " + hp, width-menuDisplaypos_txt, height/5.3333);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, height/4);
+    text("MOVE: " + move, width-menuDisplaypos_txt, height/3.2);
     textFont(specialExtra);
-    text("SPECIAL: Protection", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Shield Throw", width-menuDisplaypos_txt, 400);
+    text("SPECIAL: Protection", width-menuDisplaypos_txt, height/2.6666);
+    text("EXTRA: Shield Throw", width-menuDisplaypos_txt, height/2);
     textFont(descriptions);
-    text("Protects adjacent allies (-1 damage)", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("Throws shield for 2 damage. Cannot use Protection anymore.", width-(menuDisplaypos_txt), 400, 300, 200);
+    text("Protects adjacent allies (-1 damage)", width-(menuDisplaypos_txt), height/2.6666, 300, 100);
+    text("Throws shield for 2 damage. Cannot use Protection anymore.", width-(menuDisplaypos_txt), height/2, 300, 200);
   }
 
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
     if (team == blue) {
-      translate(hpDisplaypos*position, height-130);
+      translate(hpDisplaypos*position, height-height/6.1538);
     }
     if (team == red) {
-      translate(hpDisplaypos*(position+3), height-130);
+      translate(hpDisplaypos*(position+3), height-height/6.1538);
     }
     mini_displayLocation();
     mini_protected();
@@ -1472,8 +1493,18 @@ class Defender extends Chara {
     }
   }
 
-//**DOES SPECIAL AND EXTRA MOVES**
+  //**DOES SPECIAL AND EXTRA MOVES**
   void extraAction() {
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("B2") || BoardInput.equals("B1")) {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
     if (keyPressed) {
       if (key == 'c') {
         if (!moving) {
@@ -1503,6 +1534,7 @@ class Defender extends Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck();
+    BoardCheck();
     //check for each possible character to see if the x,y matches
     for (int i = 0; i < Defenders_B.length; i++) {
       if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
@@ -1586,34 +1618,34 @@ class FightBall extends Chara {
     }
     rectMode(CORNER);
     displayLocation();
-    text("Norm " + position, 200, 100);
+    text("Norm " + position, width/4, height/8);
     pushMatrix();
-    translate(200, height/2);
+    translate(menuDisplaypos_x, height/2);
     scale(0.9);
     showFightBall(team);
     popMatrix();
     textFont(plain);
     fill(0);
     textAlign(LEFT);
-    text("HP: " + hp, width-menuDisplaypos_txt, 150);
-    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
-    text("MOVE: " + move, width-menuDisplaypos_txt, 250);
+    text("HP: " + hp, width-menuDisplaypos_txt, height/5.3333);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, height/4);
+    text("MOVE: " + move, width-menuDisplaypos_txt, height/3.2);
     textFont(specialExtra);
-    text("SPECIAL: N/A", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Sacrifice", width-menuDisplaypos_txt, 400);
+    text("SPECIAL: N/A", width-menuDisplaypos_txt, height/2.6666);
+    text("EXTRA: Sacrifice", width-menuDisplaypos_txt, height/2);
     textFont(descriptions);
     //text("Protects adjacent allies (-1 damage)", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("Give remaining HP to adjacent ally. This character dies.", width-(menuDisplaypos_txt), 400, 300, 200);
+    text("Give remaining HP to adjacent ally. This character dies.", width-(menuDisplaypos_txt), height/2, 300, 200);
   }
 
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
     if (team == blue) {
-      translate(hpDisplaypos*position, height-130);
+      translate(hpDisplaypos*position, height-height/6.1538);
     }
     if (team == red) {
-      translate(hpDisplaypos*(position+3), height-130);
+      translate(hpDisplaypos*(position+3), height-height/6.1538);
     }
     mini_displayLocation();
     mini_protected();
@@ -1637,6 +1669,16 @@ class FightBall extends Chara {
   }
 
   void extraAction() {
+        if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("B2")|| BoardInput.equals("B1")) {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
     if (keyPressed) {
       if (key == 'c') {
         if (moving && !usedExtra) {
@@ -1659,6 +1701,7 @@ class FightBall extends Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck(); 
+    BoardCheck();
     //check for each possible character to see if the x,y matches
     for (int i = 0; i < Defenders_B.length; i++) {
       if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
@@ -1740,7 +1783,7 @@ class FlowerLady extends Chara {
     }
     rectMode(CORNER);
     displayLocation();
-    text("Petuña " + position, 200, 100);
+    text("Petuña " + position, width/4, height/8);
     pushMatrix();
     translate(200, height/2.2);
     scale(0.85);
@@ -1749,25 +1792,25 @@ class FlowerLady extends Chara {
     textFont(plain);
     fill(0);
     textAlign(LEFT);
-    text("HP: " + hp, width-menuDisplaypos_txt, 150);
-    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
-    text("MOVE: " + move, width-menuDisplaypos_txt, 250);
+    text("HP: " + hp, width-menuDisplaypos_txt, height/5.3333);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, height/4);
+    text("MOVE: " + move, width-menuDisplaypos_txt, height/3.2);
     textFont(specialExtra);
-    text("SPECIAL: Perfume", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Stench", width-menuDisplaypos_txt, 400);
+    text("SPECIAL: Perfume", width-menuDisplaypos_txt, height/2.6666);
+    text("EXTRA: Stench", width-menuDisplaypos_txt, height/2);
     textFont(descriptions);
-    text("Increase ally's next attack by 2.", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("Reduce foe's next attack by 3.", width-(menuDisplaypos_txt), 400, 300, 200);
+    text("Increase ally's next attack by 2.", width-(menuDisplaypos_txt), height/2.6666, 300, 100);
+    text("Reduce foe's next attack by 3.", width-(menuDisplaypos_txt), height/2, 300, 200);
   }
 
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
     if (team == blue) {
-      translate(hpDisplaypos*position, height-130);
+      translate(hpDisplaypos*position, height-height/6.1538);
     }
     if (team == red) {
-      translate(hpDisplaypos*(position+3), height-130);
+      translate(hpDisplaypos*(position+3), height-height/6.1538);
     }    
     mini_displayLocation();
     mini_protected();
@@ -1802,6 +1845,16 @@ class FlowerLady extends Chara {
   }
 
   void extraAction() {
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("B2")|| BoardInput.equals("B1")) {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
     if (keyPressed) {
       if (key == 'c') {
         if (!moving) {
@@ -1830,6 +1883,7 @@ class FlowerLady extends Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck(); 
+    BoardCheck();
     //check for each possible character to see if the x,y matches
     if (contactMade && (newx != 0 && newy != 0) && abs(cellx-newx)+abs(celly-newy)<=range) {
       for (int i = 0; i < Defenders_B.length; i++) {
@@ -1889,6 +1943,7 @@ class FlowerLady extends Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck(); 
+    BoardCheck();
     if (contactMade && (newx != 0 && newy != 0) && abs(cellx-newx)+abs(celly-newy)<=range) {
       //check for each possible character to see if the x,y matches
       for (int i = 0; i < Defenders_B.length; i++) {
@@ -1973,7 +2028,7 @@ class Onion extends Chara {
     }
     rectMode(CORNER);
     displayLocation();
-    text("El Cebollón " + position, 175, 100);
+    text("El Cebollón " + position, width/4.5714, height/8);
     pushMatrix();
     translate(200, height/2.2);
     showOnion(team);
@@ -1981,25 +2036,25 @@ class Onion extends Chara {
     textFont(plain);
     fill(0);
     textAlign(LEFT);
-    text("HP: " + hp, width-menuDisplaypos_txt, 150);
-    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
-    text("MOVE: " + move, width-menuDisplaypos_txt, 250);
+    text("HP: " + hp, width-menuDisplaypos_txt, height/5.3333);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, height/4);
+    text("MOVE: " + move, width-menuDisplaypos_txt, height/3.2);
     textFont(specialExtra);
-    text("SPECIAL: Dig", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Onion Vibes (always active)", width-menuDisplaypos_txt, 400, menuDisplaypos_txt, 100);
+    text("SPECIAL: Dig", width-menuDisplaypos_txt, height/2.6666);
+    text("EXTRA: Onion Vibes (always active)", width-menuDisplaypos_txt, height/2, menuDisplaypos_txt, 100);
     textFont(descriptions);
-    text("Move to an empty space (range: 2).", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("When attacked, deal 2 damage if attacker is adjacent.", width-(menuDisplaypos_txt), 450, 300, 200);
+    text("Move to an empty space (range: 2).", width-(menuDisplaypos_txt), height/2.6666, 300, 100);
+    text("When attacked, deal 2 damage if attacker is adjacent.", width-(menuDisplaypos_txt), height/2+height/16, 300, 200);
   }
 
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
     if (team == blue) {
-      translate(hpDisplaypos*position, height-130);
+      translate(hpDisplaypos*position, height-height/6.1538);
     }
     if (team == red) {
-      translate(hpDisplaypos*(position+3), height-130);
+      translate(hpDisplaypos*(position+3), height-height/6.1538);
     }    
     mini_displayLocation();
     mini_protected();
@@ -2034,6 +2089,16 @@ class Onion extends Chara {
   }
 
   void extraAction() {
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("B2")|| BoardInput.equals("B1")) {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
     if (keyPressed) {
       if (key == 'c') {
         special = true;
@@ -2094,7 +2159,7 @@ class StickRobo extends Chara {
     }
     rectMode(CORNER);
     displayLocation();
-    text("L1uv14 " + position, 200, 100);
+    text("L1uv14 " + position, width/4, height/8);
     pushMatrix();
     translate(200, height/2);
     scale(0.7);
@@ -2103,25 +2168,25 @@ class StickRobo extends Chara {
     textFont(plain);
     fill(0);
     textAlign(LEFT);
-    text("HP: " + hp, width-menuDisplaypos_txt, 150);
-    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
-    text("MOVE: " + move, width-menuDisplaypos_txt, 250);
+    text("HP: " + hp, width-menuDisplaypos_txt, height/5.3333);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, height/4);
+    text("MOVE: " + move, width-menuDisplaypos_txt, height/3.2);
     textFont(specialExtra);
-    text("SPECIAL: Teleport", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Hug", width-menuDisplaypos_txt, 400);
+    text("SPECIAL: Teleport", width-menuDisplaypos_txt, height/2.6666);
+    text("EXTRA: Hug", width-menuDisplaypos_txt, height/2);
     textFont(descriptions);
-    text("Move anywhere on the board.", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("Deal 4 damage to 1 adjacent foe.", width-(menuDisplaypos_txt), 400, 300, 200);
+    text("Move anywhere on the board.", width-(menuDisplaypos_txt), height/2.6666, 300, 100);
+    text("Deal 4 damage to 1 adjacent foe.", width-(menuDisplaypos_txt), height/2, 300, 200);
   }
 
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
     if (team == blue) {
-      translate(hpDisplaypos*position, height-130);
+      translate(hpDisplaypos*position, height-height/6.1538);
     }
     if (team == red) {
-      translate(hpDisplaypos*(position+3), height-130);
+      translate(hpDisplaypos*(position+3), height-height/6.1538);
     }
     mini_displayLocation();
     mini_protected();
@@ -2153,6 +2218,16 @@ class StickRobo extends Chara {
   }
 
   void extraAction() {
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("B2")|| BoardInput.equals("B1")) {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
     if (keyPressed) {
       if (key == 'c') {
         if (!moving) {
@@ -2195,6 +2270,7 @@ class StickRobo extends Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck();
+    BoardCheck();
 
     //prevents overlap
     for (int i = 0; i < Defenders_B.length; i++) {
@@ -2279,7 +2355,7 @@ class Swampy extends Chara {
     }
     rectMode(CORNER);
     displayLocation();
-    text("María " + position, 200, 100);
+    text("María " + position, width/4, height/8);
     pushMatrix();
     translate(200, height/2);
     scale(0.5);
@@ -2288,25 +2364,25 @@ class Swampy extends Chara {
     textFont(plain);
     fill(0);
     textAlign(LEFT);
-    text("HP: " + hp, width-menuDisplaypos_txt, 150);
-    text("ATTACK: " + atk, width-menuDisplaypos_txt, 200);
-    text("MOVE: " + move, width-menuDisplaypos_txt, 250);
+    text("HP: " + hp, width-menuDisplaypos_txt, height/5.3333);
+    text("ATTACK: " + atk, width-menuDisplaypos_txt, height/4);
+    text("MOVE: " + move, width-menuDisplaypos_txt, height/3.2);
     textFont(specialExtra);
-    text("SPECIAL: Tail Slam", width-menuDisplaypos_txt, 300);
-    text("EXTRA: Tail Twist", width-menuDisplaypos_txt, 400);
+    text("SPECIAL: Tail Slam", width-menuDisplaypos_txt, height/2.6666);
+    text("EXTRA: Tail Twist", width-menuDisplaypos_txt, height/2);
     textFont(descriptions);
-    text("Does 2 damage and push target. Bumping causes both to take 1 damage.", width-(menuDisplaypos_txt), 300, 300, 100);
-    text("Does 3 damage to all adjacent foes. Take 1 damage", width-(menuDisplaypos_txt), 400, 300, 200);
+    text("Does 2 damage and push target. Bumping causes both to take 1 damage.", width-(menuDisplaypos_txt), height/2.6666, 300, 100);
+    text("Does 3 damage to all adjacent foes. Take 1 damage", width-(menuDisplaypos_txt), height/2, 300, 200);
   }
 
   void hpDisplay() {
     float xpos = -50;
     pushMatrix();
     if (team == blue) {
-      translate(hpDisplaypos*position, height-130);
+      translate(hpDisplaypos*position, height-height/6.1538);
     }
     if (team == red) {
-      translate(hpDisplaypos*(position+3), height-130);
+      translate(hpDisplaypos*(position+3), height-height/6.1538);
     }
     mini_displayLocation();
     mini_protected();
@@ -2330,6 +2406,16 @@ class Swampy extends Chara {
   }
 
   void extraAction() {
+    if (BoardInput != null) {
+      BoardInput = trim(BoardInput);
+      if (BoardInput.equals("B2")|| BoardInput.equals("B1")) {
+        if (!moving) {
+          special = true;
+        } else if (moving && !usedExtra) {
+          extra = true;
+        }
+      }
+    }
     if (keyPressed) {
       if (key == 'c') {
         if (!moving) {
@@ -2358,6 +2444,7 @@ class Swampy extends Chara {
     fill(0, 0, 0, 50);
     rect(width/2, height/2, width, height);
     keyboardCheck(); 
+    BoardCheck();
     //check for each possible character to see if the x,y matches
     for (int i = 0; i < Defenders_B.length; i++) {
       if (Defenders_B[i].cellx == newx && Defenders_B[i].celly == newy) {
