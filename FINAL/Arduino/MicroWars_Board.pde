@@ -40,7 +40,7 @@ const int d3 = A14;
 const int d4 = A15;
 
 //For measuring change in LDR reading
-int LDRthreshold = 300;
+int LDRthreshold = 300; //Whenever there is a change beyond this value in an LDR, send a message to Processing of which LDR was changed
 float prev_a1 = 0;
 float prev_a2 = 0;
 float prev_a3 = 0;
