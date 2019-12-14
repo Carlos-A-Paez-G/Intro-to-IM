@@ -22,9 +22,17 @@ Whenever players choose an action, a message in red appears on the screen tellin
 
 Each character has a certain amount of Hit Points (HP) and these are reduced whenever they are attacked by other characters (characters can also damage themselves). How much damage a character’s attacks deal depends on their attack stat, which also varies depending on the character. 
 
-Below is a description of every character. I’ve put a screenshot of how their attacks and stats are described in the game, as well as an explanation of what each character is trying to achieve in the greater context of the game.
+Below is a description of every character. I’ve put a screenshot of how their attacks and stats are described in the game, as well as an explanation of what each character is trying to achieve in the greater context of the game. Note - all characters are referred in-game through a hispanic name… this is mostly just for fun and to give the characters more personality than by giving them generic names like “Defender” or “Flower Lady”. In the code and in the manual though, they are referred to by their more descriptive, less humanizeable names.
 
 # DEFENDER (Ricardo)
 
-![DefenderPhoto](Defender.png) 
+![DefenderPhoto](Defender.png)
+
+Out of all the characters, it is the only one that is recognizably human, which I think is important in allowing players to have some degree of familiarity with the characters. His strategic function is quite clearly communicated - it is a knight and carries a big shield, evoking the idea that having this character in your team will give your other more frail characters some protection. Mechanically, this is conveyed through the character’s high hp and low attack, as well as his “Protection” move, which allows him to boost the defense of an ally, decreasing the damage they would otherwise take from incoming attacks. Defender’s Extra move, shield throw, gives the player the ability to have an extra burst of damage when they need it, with the risk of sacrificing the Defender’s defensive utility.
+
+# SWAMP MONSTER (María)
+
+![SwampMonster](Swamp Monster.png)
+
+
 
